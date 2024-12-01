@@ -2,6 +2,11 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import './settings';
+
+const RESOURCES_PATH = app.isPackaged
+? join(process.resourcesPath, 'assets')
+: join(__dirname, '../../assets');
 
 function createWindow(): void {
   // Create the browser window.
@@ -28,8 +33,8 @@ function createWindow(): void {
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  if (is.dev) {
+    mainWindow.loadURL('http://localhost:5173')
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }

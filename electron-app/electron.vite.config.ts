@@ -1,4 +1,5 @@
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
+import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
+// const is = { dev: process.env.NODE_ENV === 'development' };
 
 export default defineConfig({
   main: {
@@ -7,5 +8,5 @@ export default defineConfig({
   preload: {
     plugins: [externalizeDepsPlugin()]
   },
-  renderer: {}
+  // ...(is.dev ? {} : { renderer: {} }),
 })

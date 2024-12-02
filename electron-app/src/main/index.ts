@@ -4,9 +4,9 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import './settings';
 
-const RESOURCES_PATH = app.isPackaged
-? join(process.resourcesPath, 'assets')
-: join(__dirname, '../../assets');
+// const RESOURCES_PATH = app.isPackaged
+// ? join(process.resourcesPath, 'assets')
+// : join(__dirname, '../../assets');
 
 function createWindow(): void {
   // Create the browser window.

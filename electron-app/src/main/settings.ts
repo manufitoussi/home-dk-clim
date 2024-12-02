@@ -4,10 +4,12 @@ import Store from './store';
 export type Device = { ip: string, name: string, picture: string };
 
 interface SettingsSchema {
+  title: string;
   devices: Device[];
 }
 
 const defaults: SettingsSchema = {
+  title: 'Daikin Control',
   devices: [],
 };
 
@@ -45,6 +47,15 @@ ipcMain.on('settings:device:update', async (_, device: Device) => {
   const index = devices.findIndex((d: Device) => d.ip === device.ip);
   devices[index] = device;
   settings.set('devices', devices);
+});
+
+ipcMain.on('settings:title:set', async (_, title: string) => {
+  settings.set('title', title);
+});
+
+ipcMain.on('settings:title:get', async (event) => {
+  console.log('settings:title:get', settings.get('title'));
+  event.returnValue = settings.get('title');
 });
 
 export default settings;

@@ -2,10 +2,9 @@
 	import '../app.css';
 	let { children } = $props();
 
+	import { page } from '$app/stores';
 	import { Button, Navbar, NavBrand, NavHamburger, NavLi, NavUl } from 'flowbite-svelte';
 	import { CogOutline, HomeOutline } from 'flowbite-svelte-icons';
-	import { page } from '$app/stores';
-	
 
 	let title = $state('');
 	let activeUrl = $state('');
@@ -14,7 +13,10 @@
 	}
 
 	$effect(() => {
-		activeUrl= $page.url.pathname;
+		activeUrl = $page.url.pathname;
+	});
+
+	$effect(() => {
 		setupTitle();
 	});
 </script>

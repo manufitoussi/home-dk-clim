@@ -50,6 +50,7 @@ ipcMain.on('settings:device:update', async (_, device: Device) => {
 });
 
 ipcMain.on('settings:title:set', async (_, title: string) => {
+  console.log('settings:title:set', title);
   settings.set('title', title);
 });
 

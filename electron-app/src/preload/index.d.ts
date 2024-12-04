@@ -3,6 +3,13 @@ import { ElectronAPI } from '@electron-toolkit/preload'
 declare global {
   interface Window {
     electron: ElectronAPI
-    api: unknown
+    api: {
+      settings: {
+        setTitle: (title: string) => Promise<void>;
+        getTitle: () => string;
+      };
+    };
   }
 }
+
+export { };

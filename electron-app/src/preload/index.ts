@@ -4,7 +4,7 @@ import { electronAPI } from '@electron-toolkit/preload';
 // Custom APIs for renderer
 const api = {
   settings: {
-    setTitle: (title: string) => ipcRenderer.invoke('settings:title:set', title),
+    setTitle: (title: string) => ipcRenderer.send('settings:title:set', title),
 
     getTitle: () => ipcRenderer.sendSync('settings:title:get'),
   }

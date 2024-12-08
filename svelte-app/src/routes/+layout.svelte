@@ -9,7 +9,7 @@
 
 	let activeUrl = $state('');
 
-	const { model } = data;
+	const { settings } = data;
 
 	$effect(() => {
 		activeUrl = $page.url.pathname;
@@ -19,7 +19,7 @@
 <Navbar color="primary">
 	<NavBrand href="/">
 		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
-			>{model.title}</span
+			>{settings.title}</span
 		>
 	</NavBrand>
 	<NavHamburger />

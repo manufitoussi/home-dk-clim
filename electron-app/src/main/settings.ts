@@ -1,7 +1,8 @@
 import { ipcMain } from 'electron';
 import Store from './store';
 
-export type Device = { ip: string, name: string, picture: string };
+export type AddDeviceArgs = { ip: string, name: string, picture: string };
+export type Device = { id: string } & AddDeviceArgs;
 
 interface SettingsSchema {
   title: string;
@@ -26,25 +27,31 @@ ipcMain.on('settings:set', async (_, path: string, value: any) => {
   settings.set(path, value);
 });
 
-ipcMain.handle('settings:device:get', async (_, ip: string) => {
-  return getDevices().find((device: Device) => device.ip === ip);
+ipcMain.handle('settings:device:get', async (_, id: string) => {
+  return getDevices().find((device: Device) => device.id === id);
 });
 
-ipcMain.handle('settings:device:all', async () => {
-  return getDevices();
+ipcMain.on('settings:device:all', async (event) => {
+  console.log('settings:device:all');
+  event.returnValue = getDevices();
 });
 
-ipcMain.on('settings:device:add', async (_, device: Device) => {
-  settings.set('devices', [...settings.get('devices'), device]);
+ipcMain.on('settings:device:add', async (event, device: AddDeviceArgs) => {
+  console.log('settings:device:add', device);
+  const newDevice = { ...device, id: Math.random().toString(36).substr(2, 9) };
+  settings.set('devices', [...settings.get('devices'), newDevice]);
+  event.returnValue = newDevice;
 });
 
-ipcMain.on('settings:device:remove', async (_, ip: string) => {
-  settings.set('devices', settings.get('devices').filter((device: Device) => device.ip !== ip));
+ipcMain.on('settings:device:remove', async (_, id: string) => {
+  console.log('settings:device:remove', id);
+  settings.set('devices', settings.get('devices').filter((device: Device) => device.id !== id));
 });
 
 ipcMain.on('settings:device:update', async (_, device: Device) => {
+  console.log('settings:device:update', device);
   const devices = getDevices();
-  const index = devices.findIndex((d: Device) => d.ip === device.ip);
+  const index = devices.findIndex((d: Device) => d.id === device.id);
   devices[index] = device;
   settings.set('devices', devices);
 });

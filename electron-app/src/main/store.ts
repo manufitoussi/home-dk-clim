@@ -11,6 +11,7 @@ export default class Store<T extends Schema> {
 
   constructor({ fileName = 'store.json', defaults = {} as T }: { fileName: string, defaults: T }) {
     const userDataPath = app.getPath('userData');
+    console.log('userDataPath', userDataPath);
     this.filePath = path.join(userDataPath, fileName);
     try {
       if (!fs.existsSync(this.filePath)) {

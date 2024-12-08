@@ -2,7 +2,7 @@
 	import '../app.css';
 
 	import { page } from '$app/stores';
-	import { Button, Navbar, NavBrand, NavHamburger, NavLi, NavUl } from 'flowbite-svelte';
+	import { Navbar, NavBrand, NavHamburger, NavLi, NavUl } from 'flowbite-svelte';
 	import { CogOutline, HomeOutline } from 'flowbite-svelte-icons';
 
 	let { children, data } = $props();
@@ -29,8 +29,6 @@
 	</NavUl>
 	<span class="inline-flex"> Température</span>
 
-	<Button href="/login" class="hidden sm:block">Login</Button>
 </Navbar>
-<p>{activeUrl}</p>
 
 {@render children()}

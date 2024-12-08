@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
+import { AddDeviceArgs, Device } from '../main/settings';
 
 // Custom APIs for renderer
 const api = {
@@ -7,6 +8,17 @@ const api = {
     setTitle: (title: string) => ipcRenderer.send('settings:title:set', title),
 
     getTitle: () => ipcRenderer.sendSync('settings:title:get'),
+
+    getDevice: (id: string) => ipcRenderer.sendSync('settings:device:get', id),
+
+    getDevices: () => ipcRenderer.sendSync('settings:device:all'),
+
+    addDevice: (device: AddDeviceArgs) => ipcRenderer.sendSync('settings:device:add', device),
+
+    removeDevice: (id: string) => ipcRenderer.send('settings:device:remove', id),
+
+    updateDevice: (device: Device) => ipcRenderer.send('settings:device:update', device),
+
   }
 };
 

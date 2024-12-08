@@ -3,7 +3,7 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-	const { settings, model } = data
+	const { settings, model } = data;
 </script>
 
 <Heading>Settings</Heading>

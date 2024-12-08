@@ -10,9 +10,10 @@
 		"sourceMap": true,
 		"strict": true,
 	},
-	// "include": [
-		// "../electron-app/src/preload/index.d.ts",
-	// ]
+	"include": [
+		"src/**/*", 
+		"../electron-app/src/preload/index.d.ts",
+	],
 	// "include": ["global.d.ts", "./types/**/$types.d.ts", "src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
 	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files

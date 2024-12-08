@@ -1,8 +1,8 @@
-import Service from '../bases/service';
-import { register } from '../container';
-import SettingsModel from '../models/settings.svelte';
+import Service from '$lib/bases/service';
+import { register } from '$lib/container';
+import SettingsModel from '$lib/models/settings.svelte';
 
-export default class SettingsService  extends Service {
+export default class SettingsService extends Service {
 
   settings = new SettingsModel();
 

@@ -32,7 +32,7 @@
     autocorrect="off"
   />
   <Button
-    class="ml-2"
+    class="ml-2 border-none"
     outline
     size="xs"
     onclick={() => {
@@ -41,7 +41,7 @@
   >
     <FloppyDiskOutline />
   </Button>
-	<Button class="ml-2" outline color="red" size="xs"
+	<Button class="ml-2 border-none" outline color="red" size="xs"
 		onclick={() => {
 			settingsService.removeDevice(device);
 		}}><TrashBinOutline /></Button

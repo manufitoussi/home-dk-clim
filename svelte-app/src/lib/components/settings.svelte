@@ -24,6 +24,7 @@
 				id="title"
 				placeholder="Title"
 				required
+				class="min-w-[17em] max-w-[25em]"
 				bind:value={settings.title}
 				autocorrect="off"
 			/>
@@ -41,13 +42,12 @@
 
 		<div class="mt-6">
 			<h2 class="text-lg font-semibold">Devices</h2>
-			<ul>
+			<div class="grid grid-cols-[minmax(9em,_11em)_minmax(12em,_17em)_3em_3em] place-items-center gap-2">
+				<div>IP</div><div>Name</div><div></div><div></div>
 				{#each settings.devices as device}
-					<li class="mb-2">
-						<DeviceEdit {device} />
-					</li>
+					<DeviceEdit {device} />
 				{/each}
-			</ul>
+			</div>
 			<div>
 				<Button
 					outline

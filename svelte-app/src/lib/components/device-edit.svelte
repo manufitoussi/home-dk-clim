@@ -32,7 +32,7 @@
     autocorrect="off"
   />
   <Button
-    class="ml-2 border-none"
+	class="ml-2 border-none {device.isDirty ? '' : 'invisible'}"
     outline
     size="xs"
     onclick={() => {

@@ -28,7 +28,7 @@
 				autocorrect="off"
 			/>
 			<Button
-				class="ml-2 border-none"
+				class="ml-2 border-none {settings.isTitleDirty ? '' : 'invisible'}"
 				outline
 				size="xs"
 				onclick={() => {

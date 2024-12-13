@@ -10,6 +10,8 @@ export default class SettingsService extends Service {
   async load() {
     await this.loadTitle();
     await this.loadDevices();
+
+    this.settings.memorize();
   }
 
   async loadTitle() {
@@ -19,6 +21,7 @@ export default class SettingsService extends Service {
 
   async saveTitle() {
     window.api.settings.setTitle(this.settings.title);
+    this.settings.memorizeTitle();
   }
 
   async loadDevices() {
@@ -46,6 +49,7 @@ export default class SettingsService extends Service {
     device.name = name;
     device.picture = picture;
     this.settings.devices.push(device);
+    device.memorize();
   }
 
   removeDevice(device: DeviceModel) {
@@ -62,6 +66,7 @@ export default class SettingsService extends Service {
       picture: device.picture,
     };
     window.api.settings.updateDevice(deviceData);
+    device.memorize();
   }
 
 }

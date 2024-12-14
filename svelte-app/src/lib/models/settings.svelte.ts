@@ -6,7 +6,6 @@ export default class SettingsModel {
 
   devices = $state<Array<DeviceModel>>([]);
 
-
   memorized: { title: string; } | null = $state(null);
 
   memorize() {

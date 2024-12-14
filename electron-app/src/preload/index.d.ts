@@ -15,6 +15,7 @@ declare global {
         addDevice: (device: AddDeviceArgs) => Device;
         removeDevice: (id: string) => Promise<void>;
         updateDevice: (device: Device) => Promise<void>;
+        sortDevices: (oldIndex: number, newIndex: number) => Promise<void>;
       };
     };
   }

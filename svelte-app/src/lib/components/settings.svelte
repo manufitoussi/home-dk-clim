@@ -4,6 +4,7 @@
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { CogOutline, FloppyDiskOutline, PlusOutline } from 'flowbite-svelte-icons';
 	import DeviceEdit from './device-edit.svelte';
+	import { SortableList } from '@jhubbardsf/svelte-sortablejs';
 
 	interface Props {
 		settings: SettingsModel;
@@ -15,7 +16,6 @@
 
 <div class="flex w-full flex-col p-6">
 	<h2 class="flex w-full items-center"><CogOutline class="size-10 space-x-4" /> Settings</h2>
-
 	<div class="m-6">
 		<div class="flex items-center">
 			<Label for="title" class="mr-2 block">Title</Label>
@@ -42,23 +42,36 @@
 
 		<div class="mt-6">
 			<h2 class="text-lg font-semibold">Devices</h2>
-			<div class="grid grid-cols-[minmax(9em,_11em)_minmax(12em,_17em)_3em_3em] place-items-center gap-2">
-				<div>IP</div><div>Name</div><div></div><div></div>
-				{#each settings.devices as device}
-					<DeviceEdit {device} />
-				{/each}
-			</div>
-			<div>
-				<Button
-					outline
-					size="xs"
-					class="border-none"
-					onclick={() => {
-						settingsService.addDevice();
+			<div
+				class="grid grid-cols-[2em_minmax(9em,_11em)_minmax(12em,_17em)_3em_3em] place-items-center gap-2"
+			>
+				<div></div>
+				<div>IP</div>
+				<div>Name</div>
+				<div></div>
+				<div>
+					<Button
+						outline
+						size="xs"
+						class="ml-2 border-none"
+						onclick={() => {
+							settingsService.addDevice();
+						}}
+					>
+						<PlusOutline />
+					</Button>
+				</div>
+				<SortableList
+					class="col-span-5 grid grid-cols-subgrid"
+					handle=".handle"
+					onSort={(e) => {
+						settingsService.sortDevices(e.oldIndex, e.newIndex);
 					}}
 				>
-					<PlusOutline />
-				</Button>
+					{#each settings.devices as device (device.id)}
+						<DeviceEdit {device} />
+					{/each}
+				</SortableList>
 			</div>
 		</div>
 	</div>

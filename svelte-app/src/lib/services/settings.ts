@@ -48,7 +48,7 @@ export default class SettingsService extends Service {
     device.ip = ip;
     device.name = name;
     device.picture = picture;
-    this.settings.devices.push(device);
+    this.settings.devices.unshift(device);
     device.memorize();
   }
 
@@ -67,6 +67,14 @@ export default class SettingsService extends Service {
     };
     window.api.settings.updateDevice(deviceData);
     device.memorize();
+  }
+
+  sortDevices(oldIndex: number, newIndex: number) {
+    window.api.settings.sortDevices(oldIndex, newIndex);
+    const devices = [...this.settings.devices];
+    devices.splice(newIndex, 0, devices.splice(oldIndex, 1)[0]);
+    this.settings.devices = devices;
+    console.log(this.settings.devices);
   }
 
 }

@@ -19,6 +19,7 @@ const api = {
 
     updateDevice: (device: Device) => ipcRenderer.send('settings:device:update', device),
 
+    sortDevices: (oldIndex: number, newIndex: number) => ipcRenderer.send('settings:device:sort', oldIndex, newIndex),
   }
 };
 

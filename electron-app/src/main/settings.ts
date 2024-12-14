@@ -39,7 +39,7 @@ ipcMain.on('settings:device:all', async (event) => {
 ipcMain.on('settings:device:add', async (event, device: AddDeviceArgs) => {
   console.log('settings:device:add', device);
   const newDevice = { ...device, id: Math.random().toString(36).substr(2, 9) };
-  settings.set('devices', [...settings.get('devices'), newDevice]);
+  settings.set('devices', [newDevice, ...settings.get('devices')]);
   event.returnValue = newDevice;
 });
 
@@ -64,6 +64,15 @@ ipcMain.on('settings:title:set', async (_, title: string) => {
 ipcMain.on('settings:title:get', async (event) => {
   console.log('settings:title:get', settings.get('title'));
   event.returnValue = settings.get('title');
+});
+
+ipcMain.on('settings:device:sort', async (_, oldIndex: number, newIndex: number) => {
+  console.log('settings:device:sort', oldIndex, newIndex);
+  const devices = getDevices();
+  const device = devices[oldIndex];
+  devices.splice(oldIndex, 1);
+  devices.splice(newIndex, 0, device);
+  settings.set('devices', devices);
 });
 
 export default settings;

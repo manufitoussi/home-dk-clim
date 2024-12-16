@@ -1,0 +1,7 @@
+{
+  "name": "home-dk-clim",
+	"version": "0.0.1",
+  "scripts" : {
+    "dev": "pnpm --filter home-dk-clim* dev"
+  }
+}

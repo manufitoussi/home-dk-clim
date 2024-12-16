@@ -43,11 +43,11 @@
 		<div class="mt-6">
 			<h2 class="text-lg font-semibold">Devices</h2>
 			<div
-				class="grid grid-cols-[2em_minmax(9em,_11em)_minmax(12em,_17em)_3em_3em] place-items-center gap-2"
+				class="grid grid-cols-[2em_minmax(9em,_11em)_minmax(12em,_17em)_3em_3em] place-items-center gap-x-2"
 			>
 				<div></div>
-				<div>IP</div>
-				<div>Name</div>
+				<div class="font-bold">IP</div>
+				<div class="font-bold">Name</div>
 				<div></div>
 				<div>
 					<Button
@@ -62,7 +62,7 @@
 					</Button>
 				</div>
 				<SortableList
-					class="col-span-5 grid grid-cols-subgrid"
+					class="col-span-5 grid grid-cols-subgrid gap-y-2"
 					handle=".handle"
 					onSort={(e) => {
 						settingsService.sortDevices(e.oldIndex, e.newIndex);

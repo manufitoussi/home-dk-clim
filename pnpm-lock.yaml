@@ -16,6 +16,9 @@ importers:
       '@electron-toolkit/utils':
         specifier: ^3.0.0
         version: 3.0.0(electron@31.7.6)
+      electron-serve:
+        specifier: ^2.1.1
+        version: 2.1.1
     devDependencies:
       '@electron-toolkit/eslint-config-prettier':
         specifier: ^2.0.0
@@ -1231,6 +1234,10 @@ packages:
 
   electron-publish@24.13.1:
     resolution: {integrity: sha512-2ZgdEqJ8e9D17Hwp5LEq5mLQPjqU3lv/IALvgp+4W8VeNhryfGhYEQC/PgDPMrnWUp+l60Ou5SJLsu+k4mhQ8A==}
+
+  electron-serve@2.1.1:
+    resolution: {integrity: sha512-SJdA7bfZuPODK9BkXTZ8EPsQlzg6yNSA0H6811DQvqzyDhPP8icIACA0bIA9aWeT+gmDB7V4eMg/wZhR+ijk6w==}
+    engines: {node: '>=18'}
 
   electron-to-chromium@1.5.74:
     resolution: {integrity: sha512-ck3//9RC+6oss/1Bh9tiAVFy5vfSKbRHAFh7Z3/eTRkEqJeWgymloShB17Vg3Z4nmDNp35vAd1BZ6CMW4Wt6Iw==}
@@ -3876,6 +3883,8 @@ snapshots:
       mime: 2.6.0
     transitivePeerDependencies:
       - supports-color
+
+  electron-serve@2.1.1: {}
 
   electron-to-chromium@1.5.74: {}
 

@@ -1,8 +1,11 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import serve from 'electron-serve'
 import icon from '../../resources/icon.png?asset'
 import './settings';
+
+const serveURL = serve({ directory: 'out/renderer' });
 
 // const RESOURCES_PATH = app.isPackaged
 // ? join(process.resourcesPath, 'assets')
@@ -17,7 +20,7 @@ function createWindow(): void {
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      preload: join(__dirname, '../preload/index.mjs'),
       sandbox: false
     }
   })
@@ -36,7 +39,8 @@ function createWindow(): void {
   if (is.dev) {
     mainWindow.loadURL('http://localhost:5173')
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    serveURL(mainWindow);
+    // mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
 

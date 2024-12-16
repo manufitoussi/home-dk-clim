@@ -2,6 +2,7 @@
   "name": "home-dk-clim",
 	"version": "0.0.1",
   "scripts" : {
-    "dev": "pnpm --filter home-dk-clim* dev"
+    "dev": "pnpm --filter home-dk-clim* dev",
+    "build": "pnpm --filter home-dk-clim-svelte-app build && pnpm --filter home-dk-clim build:win"
   }
 }

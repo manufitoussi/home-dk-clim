@@ -4,8 +4,8 @@
 	import type SettingsModel from '$lib/models/settings.svelte';
 	import { SortableList } from '@jhubbardsf/svelte-sortablejs';
 	import { Button, Input, Label } from 'flowbite-svelte';
-	import { CogOutline, FloppyDiskOutline, PlusOutline } from 'flowbite-svelte-icons';
-
+	import { FloppyDiskOutline, PlusOutline } from 'flowbite-svelte-icons';
+	import { fly } from 'svelte/transition';
 	interface Props {
 		settings: SettingsModel;
 	}
@@ -14,7 +14,7 @@
 	const settingsService = lookupSettingsService();
 </script>
 
-<div class="flex w-full flex-col p-6">
+<div in:fly={{ x: '100%' }} class="flex w-full flex-col p-6">
 	<div class="m-6">
 		<div class="flex items-center">
 			<Label for="title" class="mr-2 block">Title</Label>

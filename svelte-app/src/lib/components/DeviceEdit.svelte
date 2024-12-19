@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { lookupSettingsService } from '$lib';
 	import type DeviceModel from '$lib/models/device.svelte';
-	import { Button, Input, Badge } from 'flowbite-svelte';
-	import { FloppyDiskOutline, TrashBinOutline, SortOutline } from 'flowbite-svelte-icons';
-
+	import { Button, Input } from 'flowbite-svelte';
+	import { FloppyDiskOutline, SortOutline, TrashBinOutline } from 'flowbite-svelte-icons';
+	import { fly, slide  } from 'svelte/transition';
 	interface Props {
 		device: DeviceModel;
 	}
@@ -12,7 +12,11 @@
 	const settingsService = lookupSettingsService();
 </script>
 
-<div class="col-start-1 col-end-6 grid grid-cols-subgrid overflow-visible">
+<div
+	in:slide={{ axis: 'y', duration: 250 }}
+	out:slide={{ axis: 'y', duration: 250 }}
+	class="col-start-1 col-end-6 grid grid-cols-subgrid overflow-visible"
+>
 	<div class="handle ml-2 flex cursor-grab items-center border-none text-gray-500">
 		<SortOutline />
 	</div>

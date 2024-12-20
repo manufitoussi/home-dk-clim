@@ -53,7 +53,7 @@
           <Button
             outline
             size="xs"
-            class="ml-2 border-none"
+            class="ml-2 border-none text-green-600 hover:bg-green-600 hover:text-white"
             onclick={() => {
               settingsService.addDevice();
             }}

@@ -27,7 +27,7 @@
 <div
 	in:slide={{ axis: 'y', duration: 250 }}
 	out:slide={{ axis: 'y', duration: 250 }}
-	class="col-start-1 col-end-7 grid grid-cols-subgrid overflow-visible"
+	class="col-start-1 col-end-7 grid grid-cols-subgrid overflow-visible max-h-10"
 >
 	<div class="handle ml-2 flex cursor-grab items-center border-none text-gray-500">
 		<SortOutline />

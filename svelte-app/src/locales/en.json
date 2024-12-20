@@ -1,0 +1,22 @@
+{
+  "settings": {
+    "title": {
+      "label": "Title",
+      "description": "Title to display in main view."
+    },
+    "devices": "Devices",
+    "device": "Device",
+    "name": {
+      "label": "Name",
+      "description": "Name of the device to display in main view."
+    },
+    "ip": {
+      "label": "IP",
+      "description": "IP address of the device to connect to."
+    },
+    "icon": {
+      "label": "Icon",
+      "description": "Icon to display for the device in main view."
+    }
+  }
+}

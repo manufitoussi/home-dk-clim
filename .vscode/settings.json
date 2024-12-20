@@ -1,0 +1,8 @@
+{
+  "i18n-ally.localesPaths": [
+    "../../../../../codes/github/manufitoussi/home-dk-clim/svelte-app/src/locals",
+    "svelte-app/src/locales",
+    "svelte-app/src/lib/i18n"
+  ],
+  "i18n-ally.keystyle": "nested"
+}

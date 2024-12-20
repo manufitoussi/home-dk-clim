@@ -5,6 +5,7 @@
   import { SortableList } from '@jhubbardsf/svelte-sortablejs';
   import { Button, Input, Label } from 'flowbite-svelte';
   import { FloppyDiskOutline, PlusOutline } from 'flowbite-svelte-icons';
+  import { _ } from 'svelte-i18n';
   import { fly } from 'svelte/transition';
   interface Props {
     settings: SettingsModel;
@@ -17,11 +18,11 @@
 <div in:fly={{ x: '100%' }} class="flex w-full flex-col p-6">
   <div class="m-6">
     <div class="flex items-center">
-      <Label for="title" class="mr-2 block">Title</Label>
+      <Label for="title" class="mr-2 block text-base font-bold">{$_('settings.title.label')}</Label>
       <Input
         type="text"
         id="title"
-        placeholder="Title"
+        placeholder={$_('settings.title.description')}
         required
         class="min-w-[17em] max-w-[25em]"
         bind:value={settings.title}
@@ -31,23 +32,21 @@
         class="ml-2 border-none {settings.isTitleDirty ? '' : 'invisible'}"
         outline
         size="xs"
-        onclick={() => {
-          settingsService.saveTitle();
-        }}
+        onclick={() => settingsService.saveTitle()}
       >
         <FloppyDiskOutline />
       </Button>
     </div>
 
-    <div class="mt-6">
-      <h2 class="text-lg font-semibold">Devices</h2>
+    <div class="mt-12">
+      <h2 class="text-lg font-bold">{$_('settings.devices')}</h2>
       <div
         class="grid grid-cols-[2em_minmax(9em,_11em)_minmax(12em,_17em)_minmax(5em,_7em)_3em_3em] place-items-center gap-x-2"
       >
         <div></div>
-        <div class="font-bold">IP</div>
-        <div class="font-bold">Name</div>
-        <div class="font-bold">Icon</div>
+        <div class="font-bold">{$_('settings.ip.label')}</div>
+        <div class="font-bold">{$_('settings.name.label')}</div>
+        <div class="font-bold">{$_('settings.icon.label')}</div>
         <div></div>
         <div>
           <Button

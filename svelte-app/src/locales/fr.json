@@ -1,0 +1,22 @@
+{
+  "settings": {
+    "title": {
+      "label": "Titre",
+      "description": "Titre à afficher dans la vue principale."
+    },
+    "devices": "Appareils",
+    "device": "Appareil",
+    "name": {
+      "label": "Nom",
+      "description": "Nom de l'appareil à afficher dans la vue principale."
+    },
+    "ip": {
+      "label": "IP",
+      "description": "Adresse IP de l'appareil à connecter."
+    },
+    "icon": {
+      "label": "Icône",
+      "description": "Icône à afficher pour l'appareil dans la vue principale."
+    }
+  }
+}

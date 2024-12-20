@@ -2,13 +2,13 @@ export const csr = true;
 export const prerender = false;
 export const ssr = false;
 
-import { lookupSettingsService } from '$lib';
+import { useSettingsService } from '$lib';
 import '$lib/services/settings';
 
 export const load = async () => {
-  const settingsService = lookupSettingsService();
+  const settingsService = useSettingsService();
   await settingsService.load();
-  return {
+  return {  
     settingsService,
     settings: settingsService.settings,
   };

@@ -32,6 +32,7 @@ export default class SettingsService extends Service {
       device.ip = deviceData.ip;
       device.name = deviceData.name;
       device.picture = deviceData.picture;
+      device.icon = deviceData.icon || 'air-vent';
       return device;
     });
   }
@@ -41,13 +42,15 @@ export default class SettingsService extends Service {
       ip: '0.0.0.0',
       name: 'New Device',
       picture: '',
+      icon: 'air-vent',
     };
-    const { id, ip, name, picture } = window.api.settings.addDevice(newDevice);
+    const { id, ip, name, picture, icon } = window.api.settings.addDevice(newDevice);
     const device = new DeviceModel();
     device.id = id;
     device.ip = ip;
     device.name = name;
     device.picture = picture;
+    device.icon = icon;
     this.settings.devices.unshift(device);
     device.memorize();
   }
@@ -64,6 +67,7 @@ export default class SettingsService extends Service {
       ip: device.ip,
       name: device.name,
       picture: device.picture,
+      icon: device.icon,
     };
     window.api.settings.updateDevice(deviceData);
     device.memorize();

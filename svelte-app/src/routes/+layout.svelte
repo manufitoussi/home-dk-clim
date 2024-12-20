@@ -3,8 +3,8 @@
 
 	import { page } from '$app/state';
 	import NavButton from '$lib/components/NavButton.svelte';
-	import { ArrowBigLeft, Settings2, Thermometer, RefreshCcw } from 'lucide-svelte';
-	import { fly } from 'svelte/transition';
+	import { ArrowBigLeft, RefreshCcw, Settings2, Thermometer } from 'lucide-svelte';
+	import { fade, fly } from 'svelte/transition';
 
 	let { children, data } = $props();
 
@@ -13,7 +13,7 @@
 	const { settings } = data;
 </script>
 
-<div class="flex h-screen w-full flex-col overflow-hidden">
+<div in:fade|global class="flex h-screen w-full flex-1 flex-col overflow-hidden">
 	<div class="flex items-center gap-1 bg-[#216dcb] p-2 text-white">
 		{#if activeUrl === '/settings'}
 			<div in:fly={{ x: '100%' }} class="flex flex-1 items-center gap-1">

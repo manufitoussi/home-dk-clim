@@ -3,4 +3,4 @@
 import { lookup } from "$lib/container";
 import SettingsService from "$lib/services/settings";
 
-export const lookupSettingsService = () => lookup<SettingsService>("service:settings");
+export const useSettingsService = () => lookup<SettingsService>("service:settings");

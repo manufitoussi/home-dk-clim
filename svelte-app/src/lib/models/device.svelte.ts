@@ -3,15 +3,17 @@ export default class DeviceModel {
   ip = $state('');
   name = $state('');
   picture = $state('');
+  icon = $state('air-vent');
 
-  memorized: { id: string; ip: string; name: string; picture: string } | null = $state(null);
+  memorized: { id: string; ip: string; name: string; picture: string, icon: string } | null = $state(null);
 
   memorize() {
     this.memorized = {
       id: this.id,
       ip: this.ip,
       name: this.name,
-      picture: this.picture
+      picture: this.picture,
+      icon: this.icon,
     };
   }
 
@@ -21,6 +23,7 @@ export default class DeviceModel {
       || this.ip !== this.memorized.ip
       || this.name !== this.memorized.name
       || this.picture !== this.memorized.picture
+      || this.icon !== this.memorized.icon
     );
   }
 }

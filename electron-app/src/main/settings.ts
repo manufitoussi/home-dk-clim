@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron';
 import Store from './store';
 
-export type AddDeviceArgs = { ip: string, name: string, picture: string };
+export type AddDeviceArgs = { ip: string, name: string, picture: string, icon: string };
 export type Device = { id: string } & AddDeviceArgs;
 
 interface SettingsSchema {

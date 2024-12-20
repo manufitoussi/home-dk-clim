@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { lookupSettingsService } from '$lib';
+	import { useSettingsService } from '$lib';
 	import DeviceEdit from '$lib/components/DeviceEdit.svelte';
 	import type SettingsModel from '$lib/models/settings.svelte';
 	import { SortableList } from '@jhubbardsf/svelte-sortablejs';
@@ -11,7 +11,7 @@
 	}
 
 	const { settings }: Props = $props();
-	const settingsService = lookupSettingsService();
+	const settingsService = useSettingsService();
 </script>
 
 <div in:fly={{ x: '100%' }} class="flex w-full flex-col p-6">
@@ -42,11 +42,12 @@
 		<div class="mt-6">
 			<h2 class="text-lg font-semibold">Devices</h2>
 			<div
-				class="grid grid-cols-[2em_minmax(9em,_11em)_minmax(12em,_17em)_3em_3em] place-items-center gap-x-2"
+				class="grid grid-cols-[2em_minmax(9em,_11em)_minmax(12em,_17em)_minmax(5em,_7em)_3em_3em] place-items-center gap-x-2"
 			>
 				<div></div>
 				<div class="font-bold">IP</div>
 				<div class="font-bold">Name</div>
+				<div class="font-bold">Icon</div>
 				<div></div>
 				<div>
 					<Button
@@ -61,7 +62,7 @@
 					</Button>
 				</div>
 				<SortableList
-					class="col-span-5 grid grid-cols-subgrid gap-y-2"
+					class="col-span-6 grid grid-cols-subgrid gap-y-2"
 					handle=".handle"
 					onSort={(e) => {
 						settingsService.sortDevices(e.oldIndex, e.newIndex);

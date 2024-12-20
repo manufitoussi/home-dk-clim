@@ -5,6 +5,6 @@ module.exports = {
     '@electron-toolkit/eslint-config-prettier',
   ],
   rules: {
-    'semi': ['error', 'always'],
+    semi: ['error', 'always'],
   },
-}
+};

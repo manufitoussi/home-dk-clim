@@ -4,7 +4,6 @@ import DeviceModel from '$lib/models/device.svelte';
 import SettingsModel from '$lib/models/settings.svelte';
 
 export default class SettingsService extends Service {
-
   settings = new SettingsModel();
 
   async load() {
@@ -26,7 +25,7 @@ export default class SettingsService extends Service {
 
   async loadDevices() {
     const devices = window.api.settings.getDevices();
-    this.settings.devices = devices.map(deviceData => {
+    this.settings.devices = devices.map((deviceData) => {
       const device = new DeviceModel();
       device.id = deviceData.id;
       device.ip = deviceData.ip;
@@ -80,7 +79,6 @@ export default class SettingsService extends Service {
     this.settings.devices = devices;
     console.log(this.settings.devices);
   }
-
 }
 
 register('service:settings', SettingsService);

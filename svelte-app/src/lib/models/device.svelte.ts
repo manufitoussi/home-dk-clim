@@ -5,7 +5,8 @@ export default class DeviceModel {
   picture = $state('');
   icon = $state('air-vent');
 
-  memorized: { id: string; ip: string; name: string; picture: string, icon: string } | null = $state(null);
+  memorized: { id: string; ip: string; name: string; picture: string; icon: string } | null =
+    $state(null);
 
   memorize() {
     this.memorized = {
@@ -18,12 +19,13 @@ export default class DeviceModel {
   }
 
   get isDirty() {
-    return this.memorized !== null && (
-      this.id !== this.memorized.id
-      || this.ip !== this.memorized.ip
-      || this.name !== this.memorized.name
-      || this.picture !== this.memorized.picture
-      || this.icon !== this.memorized.icon
+    return (
+      this.memorized !== null &&
+      (this.id !== this.memorized.id ||
+        this.ip !== this.memorized.ip ||
+        this.name !== this.memorized.name ||
+        this.picture !== this.memorized.picture ||
+        this.icon !== this.memorized.icon)
     );
   }
 }

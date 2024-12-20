@@ -1,22 +1,21 @@
-import DeviceModel from "./device.svelte";
+import DeviceModel from './device.svelte';
 
 export default class SettingsModel {
-
   title = $state('');
 
   devices = $state<Array<DeviceModel>>([]);
 
-  memorized: { title: string; } | null = $state(null);
+  memorized: { title: string } | null = $state(null);
 
   memorize() {
     this.memorizeTitle();
-    this.devices.forEach(device => device.memorize());
+    this.devices.forEach((device) => device.memorize());
   }
 
   get isDirty() {
-    return this.memorized !== null && (
-      this.title !== this.memorized.title
-      || this.devices.some(device => device.isDirty)
+    return (
+      this.memorized !== null &&
+      (this.title !== this.memorized.title || this.devices.some((device) => device.isDirty))
     );
   }
 
@@ -27,5 +26,4 @@ export default class SettingsModel {
   memorizeTitle() {
     this.memorized = { title: this.title };
   }
-
 }

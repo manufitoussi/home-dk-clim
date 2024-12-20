@@ -5,7 +5,7 @@ declare global {
   interface Window {
     AddDeviceArgs: AddDeviceArgs;
     Device: Device;
-    electron: ElectronAPI
+    electron: ElectronAPI;
     api: {
       settings: {
         setTitle: (title: string) => Promise<void>;
@@ -21,4 +21,4 @@ declare global {
   }
 }
 
-export { };
+export {};

@@ -8,8 +8,8 @@ import '$lib/services/settings';
 export const load = async () => {
   const settingsService = useSettingsService();
   await settingsService.load();
-  return {  
+  return {
     settingsService,
     settings: settingsService.settings,
   };
-}
+};

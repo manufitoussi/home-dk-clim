@@ -19,8 +19,9 @@ const api = {
 
     updateDevice: (device: Device) => ipcRenderer.send('settings:device:update', device),
 
-    sortDevices: (oldIndex: number, newIndex: number) => ipcRenderer.send('settings:device:sort', oldIndex, newIndex),
-  }
+    sortDevices: (oldIndex: number, newIndex: number) =>
+      ipcRenderer.send('settings:device:sort', oldIndex, newIndex),
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

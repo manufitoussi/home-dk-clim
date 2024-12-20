@@ -70,8 +70,11 @@ type ObjectWithInjectedMetadata = object & { __injected__: InjectedMetadata };
  * @param propertyName The property name
  * @param key The key to lookup the instance by. If not provided, the property name will be used or the key declared with `injected`.
  */
-export function inject<T extends ObjectWithInjectedMetadata>(target: T, propertyName: string, key: string | null = null) {
-
+export function inject<T extends ObjectWithInjectedMetadata>(
+  target: T,
+  propertyName: string,
+  key: string | null = null,
+) {
   let lookupKey = key || propertyName;
   if (target.__injected__ && target.__injected__.has(propertyName)) {
     lookupKey = target.__injected__.get(propertyName) as string;
@@ -82,13 +85,13 @@ export function inject<T extends ObjectWithInjectedMetadata>(target: T, property
       return lookup(lookupKey);
     },
     enumerable: true,
-    configurable: false
+    configurable: false,
   });
 }
 
 /**
  * Decorator to declare a property to be injected in the constructor.
- * If no key is provided, the property name will be used. 
+ * If no key is provided, the property name will be used.
  * Call `inject` for individual properties.
  * @param key The key to lookup the instance by. If not provided, the property name will be used.
  * @returns The property decorator
@@ -98,9 +101,9 @@ export function injected(key: string | null = null): PropertyDecorator {
     const withInjectedMetadata = target as ObjectWithInjectedMetadata;
     if (!('__injected__' in withInjectedMetadata)) {
       Object.defineProperty(target, '__injected__', {
-        value:  new Map<string, string>(),
+        value: new Map<string, string>(),
         enumerable: false,
-        configurable: false
+        configurable: false,
       });
     }
 

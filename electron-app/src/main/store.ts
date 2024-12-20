@@ -9,7 +9,7 @@ export default class Store<T extends Schema> {
   private data: T;
   private filePath: string;
 
-  constructor({ fileName = 'store.json', defaults = {} as T }: { fileName: string, defaults: T }) {
+  constructor({ fileName = 'store.json', defaults = {} as T }: { fileName: string; defaults: T }) {
     const userDataPath = app.getPath('userData');
     console.log('userDataPath', userDataPath);
     this.filePath = path.join(userDataPath, fileName);
@@ -69,4 +69,3 @@ export default class Store<T extends Schema> {
     }
   }
 }
-

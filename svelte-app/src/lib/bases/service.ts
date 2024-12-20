@@ -1,4 +1,4 @@
 /**
  * Base class for all services.
  */
-export default class Service { };
+export default class Service {}

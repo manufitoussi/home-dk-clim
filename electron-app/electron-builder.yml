@@ -1,7 +1,7 @@
-appId: com.electron.app
-productName: electron-app
+appId: fr.softef.home-dk-ac
+productName: Home Daikin AC
 directories:
-  buildResources: build
+  buildResources: resources
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: electron-app
+  executableName: home-dk-ac
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

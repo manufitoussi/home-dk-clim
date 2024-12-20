@@ -1,7 +1,7 @@
 {
-  "name": "home-dk-clim",
+  "name": "home-dk-ac",
   "version": "1.0.0",
-  "description": "A minimal Electron application with TypeScript",
+  "description": "Home Daikin AC",
   "type": "module",
   "main": "./out/main/index.js",
   "author": "example.com",

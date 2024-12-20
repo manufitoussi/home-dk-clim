@@ -1,8 +1,8 @@
 {
-  "name": "home-dk-clim",
-	"version": "0.0.1",
+  "name": "home-daikin-ac",
   "scripts" : {
-    "dev": "pnpm --filter home-dk-clim* dev",
-    "build": "pnpm --filter home-dk-clim-svelte-app build && pnpm --filter home-dk-clim build:win"
+    "dev": "pnpm --filter home-dk-ac* dev",
+    "build": "pnpm --filter home-dk-ac-svelte-app build && pnpm --filter home-dk-ac build:win",
+    "format": "pnpm --filter home-dk-ac* format"
   }
 }

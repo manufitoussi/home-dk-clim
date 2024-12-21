@@ -6,17 +6,22 @@
     },
     "devices": "Appareils",
     "device": "Appareil",
-    "name": {
-      "label": "Nom",
-      "description": "Nom de l'appareil à afficher dans la vue principale."
-    },
-    "ip": {
-      "label": "IP",
-      "description": "Adresse IP de l'appareil à connecter."
-    },
-    "icon": {
-      "label": "Icône",
-      "description": "Icône à afficher pour l'appareil dans la vue principale."
+    "device-looking-for": "Recherche de l'appareil...",
+    "device-not-found": "Appareil non trouvé.",
+    "device-found": "Appareil trouvé.",
+    "device-edit": {
+      "name": {
+        "label": "Nom",
+        "description": "Nom de l'appareil à afficher dans la vue principale."
+      },
+      "ip": {
+        "label": "IP",
+        "description": "Adresse IP de l'appareil à connecter."
+      },
+      "icon": {
+        "label": "Icône",
+        "description": "Icône à afficher pour l'appareil dans la vue principale."
+      }
     }
   }
 }

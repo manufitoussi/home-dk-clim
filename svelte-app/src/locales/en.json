@@ -6,17 +6,22 @@
     },
     "devices": "Devices",
     "device": "Device",
-    "name": {
-      "label": "Name",
-      "description": "Name of the device to display in main view."
-    },
-    "ip": {
-      "label": "IP",
-      "description": "IP address of the device to connect to."
-    },
-    "icon": {
-      "label": "Icon",
-      "description": "Icon to display for the device in main view."
+    "device-looking-for": "Looking for device...",
+    "device-not-found": "Device not found.",
+    "device-found": "Device found.",
+    "device-edit": {
+      "name": {
+        "label": "Name",
+        "description": "Name of the device to display in main view."
+      },
+      "ip": {
+        "label": "IP",
+        "description": "IP address of the device to connect to."
+      },
+      "icon": {
+        "label": "Icon",
+        "description": "Icon to display for the device in main view."
+      }
     }
   }
 }

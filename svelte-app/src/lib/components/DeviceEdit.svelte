@@ -19,15 +19,18 @@
     DropdownItem,
     Input,
     Spinner,
+    Tooltip,
   } from 'flowbite-svelte';
-  import { Check, XIcon, TriangleAlert } from 'lucide-svelte';
   import {
     ChevronDownOutline,
     FloppyDiskOutline,
     SortOutline,
     TrashBinOutline,
   } from 'flowbite-svelte-icons';
+  import { Check, TriangleAlert, XIcon } from 'lucide-svelte';
+  import { _ } from 'svelte-i18n';
   import { slide } from 'svelte/transition';
+
   const {
     device,
     onSaveDevice,
@@ -99,25 +102,28 @@
   <div class="flex items-center justify-center">
     {#await onValidateIp(device.ip)}
       <Spinner size={5} />
+      <Tooltip>{$_('settings.device-looking-for')}</Tooltip>
     {:then isValid}
-      {#if isValid}<Check color="green" />{:else}<XIcon color="orange" />{/if}
+      {#if isValid}
+        <Check color="green" />
+        <Tooltip>{$_('settings.device-found')}</Tooltip>
+      {:else}
+        <XIcon color="orange" />
+        <Tooltip>{$_('settings.device-not-found')}</Tooltip>
+      {/if}
     {:catch error}
-      <div title={error.message || error}>
-        <TriangleAlert color="red" />
-      </div>
+      <TriangleAlert color="red" />
+      <Tooltip>{error.message || error}</Tooltip>
     {/await}
   </div>
 
-  <Button
-    class="ml-2 border-none {device.isDirty ? '' : 'invisible'}"
-    outline
-    size="xs"
-    onclick={() => {
-      onSaveDevice(device);
-    }}
+  <div
+    class="ml-2 flex items-center border-none {device.isDirty
+      ? ''
+      : 'invisible'}"
   >
     <FloppyDiskOutline />
-  </Button>
+  </div>
   <Button
     class="ml-2 border-none"
     outline

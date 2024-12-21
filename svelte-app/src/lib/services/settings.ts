@@ -82,9 +82,13 @@ export default class SettingsService extends Service {
   }
 
   async validateIp(ip: string) {
-    const valid = await window.api.settings.validateIp(ip);
-    console.log('validateIp', ip, valid);
-    return valid;
+    try {
+      return await window.api.settings.validateIp(ip);
+    } catch (error) {
+      const e = error as { message: string };
+      e.message = e.message.replace("Error invoking remote method 'settings:device:validate':", '');
+      throw e;
+    }
   }
 }
 

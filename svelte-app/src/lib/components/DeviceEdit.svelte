@@ -87,12 +87,11 @@
     bind:value={device.ip}
     oninput={async () => {
       onSaveDeviceDebounced(device);
-      isValid = await onValidateIp(device.ip);
     }}
     autocorrect="off"
   />
 
-  <DeviceValidStatus {device} {onValidateIp} />
+  <DeviceValidStatus {device} {onValidateIp} bind:isValid />
 
   <Button
     class="ml-2 border-none"

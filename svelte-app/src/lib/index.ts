@@ -14,8 +14,10 @@ export function debounce<T extends (...args: any[]) => void>(
   let timer: ReturnType<typeof setTimeout>;
   return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
     clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, timeout);
+    return new Promise((resolve) => {
+      timer = setTimeout(() => {
+        resolve(func.apply(this, args));
+      }, timeout);
+    });
   };
 }

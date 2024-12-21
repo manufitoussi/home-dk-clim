@@ -77,10 +77,11 @@ ipcMain.handle('settings:device:validate', async (_, ip: string) => {
     await getSensorInfo(ip);
     return true;
   } catch (error) {
-    if ((error as { message: string }).message.includes('timeout')) {
+    const e = error as { message: string };
+    if (e.message?.includes('timeout')) {
       return false;
     } else {
-      throw error;
+      throw e;
     }
   }
 });

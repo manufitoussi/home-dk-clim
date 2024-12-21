@@ -40,7 +40,7 @@ export const getBasicInfo = async (ip: string) => {
 
 export const getSensorInfo = async (ip: string) => {
   const result = await axios.get(`http://${ip}/aircon/get_sensor_info`, {
-    timeout: 2000,
+    timeout: 3000,
   });
   const text = result.data;
   return parseSensorInfo(text);

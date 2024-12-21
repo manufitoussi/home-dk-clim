@@ -31,37 +31,9 @@
 <div
   in:slide={{ axis: 'y', duration: 250 }}
   out:slide={{ axis: 'y', duration: 250 }}
+  id={device.id}
   class="col-start-1 col-end-7 grid max-h-10 grid-cols-subgrid overflow-visible"
 >
-  <div
-    class="handle ml-2 flex cursor-grab items-center border-none text-gray-500"
-  >
-    <SortOutline />
-  </div>
-
-  <Input
-    type="text"
-    id="ip"
-    placeholder="192.168.0.x"
-    required
-    bind:value={device.ip}
-    oninput={() => {
-      onSaveDeviceDebounced(device);
-    }}
-    autocorrect="off"
-  />
-  <Input
-    type="text"
-    id="name"
-    placeholder="Device name"
-    required
-    bind:value={device.name}
-    oninput={() => {
-      onSaveDeviceDebounced(device);
-    }}
-    autocorrect="off"
-  />
-
   <div class="contents">
     <Button outline size="xs" class="border-none" color="light">
       {@render iconComponent(device.icon)}
@@ -82,6 +54,28 @@
       {/each}
     </Dropdown>
   </div>
+  <Input
+    type="text"
+    id="name"
+    placeholder="Device name"
+    required
+    bind:value={device.name}
+    oninput={() => {
+      onSaveDeviceDebounced(device);
+    }}
+    autocorrect="off"
+  />
+  <Input
+    type="text"
+    id="ip"
+    placeholder="192.168.0.x"
+    required
+    bind:value={device.ip}
+    oninput={() => {
+      onSaveDeviceDebounced(device);
+    }}
+    autocorrect="off"
+  />
 
   <Button
     class="ml-2 border-none {device.isDirty ? '' : 'invisible'}"
@@ -100,8 +94,16 @@
     size="xs"
     onclick={() => {
       onRemoveDevice(device);
+      setTimeout(() => {
+        document.getElementById(device.id)?.remove();
+      }, 200);
     }}
   >
     <TrashBinOutline />
   </Button>
+  <div
+    class="handle ml-2 flex cursor-grab items-center border-none text-gray-500"
+  >
+    <SortOutline />
+  </div>
 </div>

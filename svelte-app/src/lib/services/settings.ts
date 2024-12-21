@@ -43,7 +43,8 @@ export default class SettingsService extends Service {
       picture: '',
       icon: 'air-vent',
     };
-    const { id, ip, name, picture, icon } = window.api.settings.addDevice(newDevice);
+    const { id, ip, name, picture, icon } =
+      window.api.settings.addDevice(newDevice);
     const device = new DeviceModel();
     device.id = id;
     device.ip = ip;
@@ -55,8 +56,7 @@ export default class SettingsService extends Service {
   }
 
   removeDevice(device: DeviceModel) {
-    const index = this.settings.devices.indexOf(device);
-    this.settings.devices.splice(index, 1);
+    this.settings.devices = this.settings.devices.filter((d) => d !== device);
     window.api.settings.removeDevice(device.id);
   }
 
@@ -74,10 +74,11 @@ export default class SettingsService extends Service {
 
   sortDevices(oldIndex: number, newIndex: number) {
     window.api.settings.sortDevices(oldIndex, newIndex);
-    const devices = [...this.settings.devices];
-    devices.splice(newIndex, 0, devices.splice(oldIndex, 1)[0]);
-    this.settings.devices = devices;
-    console.log(this.settings.devices);
+    this.settings.devices.splice(
+      newIndex,
+      0,
+      this.settings.devices.splice(oldIndex, 1)[0],
+    );
   }
 }
 

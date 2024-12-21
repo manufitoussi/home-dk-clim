@@ -58,12 +58,11 @@
     <div class="mt-12">
       <h2 class="text-lg font-bold">{$_('settings.devices')}</h2>
       <div
-        class="grid grid-cols-[2em_minmax(9em,_11em)_minmax(12em,_17em)_minmax(5em,_7em)_3em_3em] place-items-center gap-x-2"
+        class="grid grid-cols-[minmax(5em,_7em)_minmax(12em,_17em)_minmax(9em,_11em)_3em_3em_2em] place-items-center gap-x-2"
       >
-        <div></div>
-        <div class="font-bold">{$_('settings.ip.label')}</div>
-        <div class="font-bold">{$_('settings.name.label')}</div>
         <div class="font-bold">{$_('settings.icon.label')}</div>
+        <div class="font-bold">{$_('settings.name.label')}</div>
+        <div class="font-bold">{$_('settings.ip.label')}</div>
         <div></div>
         <div>
           <Button
@@ -75,6 +74,7 @@
             <PlusOutline />
           </Button>
         </div>
+        <div></div>
         <SortableList
           class="col-span-6 grid grid-cols-subgrid gap-y-2"
           handle=".handle"

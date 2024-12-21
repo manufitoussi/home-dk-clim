@@ -60,12 +60,11 @@
     <div class="mt-12">
       <h2 class="text-lg font-bold">{$_('settings.devices')}</h2>
       <div
-        class="grid grid-cols-[minmax(5em,_7em)_minmax(12em,_17em)_minmax(9em,_11em)_3em_3em_3em_2em] place-items-center gap-x-2"
+        class="grid grid-cols-[minmax(5em,_7em)_minmax(12em,_17em)_minmax(9em,_11em)_2em_3em_2em_3em] place-items-center gap-x-2"
       >
         <div class="font-bold">{$_('settings.device-edit.icon.label')}</div>
         <div class="font-bold">{$_('settings.device-edit.name.label')}</div>
         <div class="font-bold">{$_('settings.device-edit.ip.label')}</div>
-        <div></div>
         <div></div>
         <div>
           <Button
@@ -77,6 +76,7 @@
             <PlusOutline />
           </Button>
         </div>
+        <div></div>
         <div></div>
         <SortableList
           class="col-span-7 grid grid-cols-subgrid gap-y-2"

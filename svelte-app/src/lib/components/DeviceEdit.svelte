@@ -13,23 +13,16 @@
   import { debounce } from '$lib';
   import DeviceIcon, { ICONS } from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
-  import {
-    Button,
-    Dropdown,
-    DropdownItem,
-    Input,
-    Spinner,
-    Tooltip,
-  } from 'flowbite-svelte';
+  import { Button, Dropdown, DropdownItem, Input } from 'flowbite-svelte';
   import {
     ChevronDownOutline,
     FloppyDiskOutline,
     SortOutline,
     TrashBinOutline,
   } from 'flowbite-svelte-icons';
-  import { Check, TriangleAlert, XIcon } from 'lucide-svelte';
   import { _ } from 'svelte-i18n';
   import { slide } from 'svelte/transition';
+  import DeviceValidStatus from './DeviceValidStatus.svelte';
 
   const {
     device,
@@ -52,7 +45,7 @@
   in:slide={{ axis: 'y', duration: 250 }}
   out:slide={{ axis: 'y', duration: 250 }}
   id={device.id}
-  class="col-start-1 col-end-8 grid max-h-10 grid-cols-subgrid overflow-visible"
+  class="group col-start-1 col-end-8 grid max-h-11 grid-cols-subgrid overflow-visible"
 >
   <div class="contents">
     <Button outline size="xs" class="border-none" color="light">
@@ -99,31 +92,8 @@
     autocorrect="off"
   />
 
-  <div class="flex items-center justify-center">
-    {#await onValidateIp(device.ip)}
-      <Spinner size={5} />
-      <Tooltip>{$_('settings.device-looking-for')}</Tooltip>
-    {:then isValid}
-      {#if isValid}
-        <Check color="green" />
-        <Tooltip>{$_('settings.device-found')}</Tooltip>
-      {:else}
-        <XIcon color="orange" />
-        <Tooltip>{$_('settings.device-not-found')}</Tooltip>
-      {/if}
-    {:catch error}
-      <TriangleAlert color="red" />
-      <Tooltip>{error.message || error}</Tooltip>
-    {/await}
-  </div>
+  <DeviceValidStatus {device} {onValidateIp} />
 
-  <div
-    class="ml-2 flex items-center border-none {device.isDirty
-      ? ''
-      : 'invisible'}"
-  >
-    <FloppyDiskOutline />
-  </div>
   <Button
     class="ml-2 border-none"
     outline
@@ -139,8 +109,15 @@
     <TrashBinOutline />
   </Button>
   <div
-    class="handle ml-2 flex cursor-grab items-center border-none text-gray-500"
+    class="handle ml-2 flex cursor-grab items-center border-none text-black opacity-0 group-hover:opacity-100"
   >
     <SortOutline />
+  </div>
+  <div
+    class="ml-2 flex items-center border-none {device.isDirty
+      ? ''
+      : 'invisible'}"
+  >
+    <FloppyDiskOutline />
   </div>
 </div>

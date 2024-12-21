@@ -16,6 +16,7 @@ declare global {
         removeDevice: (id: string) => Promise<void>;
         updateDevice: (device: Device) => Promise<void>;
         sortDevices: (oldIndex: number, newIndex: number) => Promise<void>;
+        validateIp: (ip: string) => Promise<boolean>;
       };
     };
   }

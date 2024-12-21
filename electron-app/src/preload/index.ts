@@ -21,6 +21,8 @@ const api = {
 
     sortDevices: (oldIndex: number, newIndex: number) =>
       ipcRenderer.send('settings:device:sort', oldIndex, newIndex),
+
+    validateIp: (ip: string) => ipcRenderer.invoke('settings:device:validate', ip),
   },
 };
 

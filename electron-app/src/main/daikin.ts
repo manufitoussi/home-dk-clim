@@ -1,4 +1,5 @@
 import { ipcMain } from 'electron';
+import axios from 'axios';
 
 const parseKeyValueString = (keyValueString: string) => {
   const keyValues = keyValueString.split(',');
@@ -24,7 +25,7 @@ export const parseBasicInfo = (txt: string) => {
 };
 
 export const parseSensorInfo = (txt: string) => {
-  return parseKeyValueString(txt);
+    return parseKeyValueString(txt);
 };
 
 export const parseControlInfo = (txt: string) => {
@@ -38,8 +39,10 @@ export const getBasicInfo = async (ip: string) => {
 };
 
 export const getSensorInfo = async (ip: string) => {
-  const result = await fetch(`http://${ip}/aircon/get_sensor_info`);
-  const text = await result.text();
+  const result = await axios.get(`http://${ip}/aircon/get_sensor_info`, {
+    timeout: 2000,
+  });
+  const text = result.data;
   return parseSensorInfo(text);
 };
 

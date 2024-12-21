@@ -1,8 +1,26 @@
+<script module lang="ts">
+  export interface MangageDeviceProps {
+    onSaveDevice: (device: DeviceModel) => void;
+    onRemoveDevice: (device: DeviceModel) => void;
+    onValidateIp: (ip: string) => Promise<boolean>;
+  }
+  export interface DeviceEditProps extends MangageDeviceProps {
+    device: DeviceModel;
+  }
+</script>
+
 <script lang="ts">
   import { debounce } from '$lib';
   import DeviceIcon, { ICONS } from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
-  import { Button, Dropdown, DropdownItem, Input } from 'flowbite-svelte';
+  import {
+    Button,
+    Dropdown,
+    DropdownItem,
+    Input,
+    Spinner,
+  } from 'flowbite-svelte';
+  import { Check, XIcon, TriangleAlert } from 'lucide-svelte';
   import {
     ChevronDownOutline,
     FloppyDiskOutline,
@@ -10,18 +28,17 @@
     TrashBinOutline,
   } from 'flowbite-svelte-icons';
   import { slide } from 'svelte/transition';
-  export interface MangageDeviceProps {
-    onSaveDevice: (device: DeviceModel) => void;
-    onRemoveDevice: (device: DeviceModel) => void;
-  }
-  export interface DeviceEditProps extends MangageDeviceProps {
-    device: DeviceModel;
-  }
-
-  const { device, onSaveDevice, onRemoveDevice }: DeviceEditProps = $props();
+  const {
+    device,
+    onSaveDevice,
+    onRemoveDevice,
+    onValidateIp,
+  }: DeviceEditProps = $props();
   let dropdownIconOpen = $state(false);
 
   const onSaveDeviceDebounced = debounce(onSaveDevice);
+
+  let isValid = $state(false);
 </script>
 
 {#snippet iconComponent(icon: string)}
@@ -32,7 +49,7 @@
   in:slide={{ axis: 'y', duration: 250 }}
   out:slide={{ axis: 'y', duration: 250 }}
   id={device.id}
-  class="col-start-1 col-end-7 grid max-h-10 grid-cols-subgrid overflow-visible"
+  class="col-start-1 col-end-8 grid max-h-10 grid-cols-subgrid overflow-visible"
 >
   <div class="contents">
     <Button outline size="xs" class="border-none" color="light">
@@ -65,17 +82,31 @@
     }}
     autocorrect="off"
   />
+
   <Input
     type="text"
     id="ip"
     placeholder="192.168.0.x"
     required
     bind:value={device.ip}
-    oninput={() => {
+    oninput={async () => {
       onSaveDeviceDebounced(device);
+      isValid = await onValidateIp(device.ip);
     }}
     autocorrect="off"
   />
+
+  <div class="flex items-center justify-center">
+    {#await onValidateIp(device.ip)}
+      <Spinner size={5} />
+    {:then isValid}
+      {#if isValid}<Check color="green" />{:else}<XIcon color="orange" />{/if}
+    {:catch error}
+      <div title={error.message || error}>
+        <TriangleAlert color="red" />
+      </div>
+    {/await}
+  </div>
 
   <Button
     class="ml-2 border-none {device.isDirty ? '' : 'invisible'}"

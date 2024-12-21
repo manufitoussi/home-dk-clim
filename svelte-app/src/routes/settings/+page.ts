@@ -25,6 +25,13 @@ const onSortDevices = async (oldIndex: number, newIndex: number) => {
   await settingsService.sortDevices(oldIndex, newIndex);
 };
 
+const onValidateIp =  async (ip: string) => {
+  console.log('onValidateIp', ip);
+  const isValid = await settingsService.validateIp(ip);
+  console.log(isValid);
+  return isValid;
+}
+
 export const load: PageLoad = async ({ parent }) => {
   return {
     onSaveTitle,
@@ -32,6 +39,7 @@ export const load: PageLoad = async ({ parent }) => {
     onRemoveDevice,
     onAddDevice,
     onSortDevices,
+    onValidateIp,
     ...(await parent()),
   };
 };

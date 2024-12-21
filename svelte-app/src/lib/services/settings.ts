@@ -80,6 +80,12 @@ export default class SettingsService extends Service {
       this.settings.devices.splice(oldIndex, 1)[0],
     );
   }
+
+  async validateIp(ip: string) {
+    const valid = await window.api.settings.validateIp(ip);
+    console.log('validateIp', ip, valid);
+    return valid;
+  }
 }
 
 register('service:settings', SettingsService);

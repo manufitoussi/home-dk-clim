@@ -47,14 +47,9 @@
         oninput={onSaveTitleDebounced}
         autocorrect="off"
       />
-      <Button
-        class="ml-2 border-none {settings.isTitleDirty ? '' : 'invisible'}"
-        outline
-        size="xs"
-        onclick={onSaveTitle}
-      >
-        <FloppyDiskOutline />
-      </Button>
+      <div class="ml-2 border-none {settings.isTitleDirty ? '' : 'invisible'}">
+        <FloppyDiskOutline class="animate-bounce" />
+      </div>
     </div>
 
     <div class="mt-12">
@@ -86,7 +81,12 @@
           }}
         >
           {#each settings.devices as device (device.id)}
-            <DeviceEdit {device} {onSaveDevice} {onRemoveDevice} {onValidateIp} />
+            <DeviceEdit
+              {device}
+              {onSaveDevice}
+              {onRemoveDevice}
+              {onValidateIp}
+            />
           {/each}
         </SortableList>
       </div>

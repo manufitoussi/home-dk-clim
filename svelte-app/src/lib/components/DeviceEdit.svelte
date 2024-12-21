@@ -117,6 +117,6 @@
       ? ''
       : 'invisible'}"
   >
-    <FloppyDiskOutline />
+    <FloppyDiskOutline class="animate-bounce" />
   </div>
 </div>

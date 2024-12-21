@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useSettingsService } from '$lib';
+  import { debounce } from '$lib';
   import DeviceIcon, { ICONS } from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
   import { Button, Dropdown, DropdownItem, Input } from 'flowbite-svelte';
@@ -10,14 +10,18 @@
     TrashBinOutline,
   } from 'flowbite-svelte-icons';
   import { slide } from 'svelte/transition';
-
-  interface Props {
+  export interface MangageDeviceProps {
+    onSaveDevice: (device: DeviceModel) => void;
+    onRemoveDevice: (device: DeviceModel) => void;
+  }
+  export interface DeviceEditProps extends MangageDeviceProps {
     device: DeviceModel;
   }
 
-  const { device }: Props = $props();
-  const settingsService = useSettingsService();
+  const { device, onSaveDevice, onRemoveDevice }: DeviceEditProps = $props();
   let dropdownIconOpen = $state(false);
+
+  const onSaveDeviceDebounced = debounce(onSaveDevice);
 </script>
 
 {#snippet iconComponent(icon: string)}
@@ -29,7 +33,9 @@
   out:slide={{ axis: 'y', duration: 250 }}
   class="col-start-1 col-end-7 grid max-h-10 grid-cols-subgrid overflow-visible"
 >
-  <div class="handle ml-2 flex cursor-grab items-center border-none text-gray-500">
+  <div
+    class="handle ml-2 flex cursor-grab items-center border-none text-gray-500"
+  >
     <SortOutline />
   </div>
 
@@ -39,6 +45,9 @@
     placeholder="192.168.0.x"
     required
     bind:value={device.ip}
+    oninput={() => {
+      onSaveDeviceDebounced(device);
+    }}
     autocorrect="off"
   />
   <Input
@@ -47,6 +56,9 @@
     placeholder="Device name"
     required
     bind:value={device.name}
+    oninput={() => {
+      onSaveDeviceDebounced(device);
+    }}
     autocorrect="off"
   />
 
@@ -62,6 +74,7 @@
           on:click={() => {
             device.icon = icon;
             dropdownIconOpen = false;
+            onSaveDeviceDebounced(device);
           }}
         >
           {@render iconComponent(icon)}
@@ -75,7 +88,7 @@
     outline
     size="xs"
     onclick={() => {
-      settingsService.saveDevice(device);
+      onSaveDevice(device);
     }}
   >
     <FloppyDiskOutline />
@@ -86,7 +99,7 @@
     color="red"
     size="xs"
     onclick={() => {
-      settingsService.removeDevice(device);
+      onRemoveDevice(device);
     }}
   >
     <TrashBinOutline />

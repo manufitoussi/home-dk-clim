@@ -1,24 +1,40 @@
 <script lang="ts">
-  import { useSettingsService } from '$lib';
-  import DeviceEdit from '$lib/components/DeviceEdit.svelte';
+  import { debounce } from '$lib';
+  import DeviceEdit, {
+    type MangageDeviceProps,
+  } from '$lib/components/DeviceEdit.svelte';
   import type SettingsModel from '$lib/models/settings.svelte';
   import { SortableList } from '@jhubbardsf/svelte-sortablejs';
   import { Button, Input, Label } from 'flowbite-svelte';
   import { FloppyDiskOutline, PlusOutline } from 'flowbite-svelte-icons';
   import { _ } from 'svelte-i18n';
   import { fly } from 'svelte/transition';
-  interface Props {
+
+  interface Props extends MangageDeviceProps {
     settings: SettingsModel;
+    onSaveTitle: () => void;
+    onAddDevice: () => void;
+    onSortDevices: (oldIndex: number, newIndex: number) => void;
   }
 
-  const { settings }: Props = $props();
-  const settingsService = useSettingsService();
+  const {
+    settings,
+    onSaveTitle,
+    onAddDevice,
+    onSortDevices,
+    onSaveDevice,
+    onRemoveDevice,
+  }: Props = $props();
+
+  const onSaveTitleDebounced = debounce(onSaveTitle);
 </script>
 
 <div in:fly={{ x: '100%' }} class="flex w-full flex-col p-6">
   <div class="m-6">
     <div class="flex items-center">
-      <Label for="title" class="mr-2 block text-base font-bold">{$_('settings.title.label')}</Label>
+      <Label for="title" class="mr-2 block text-base font-bold"
+        >{$_('settings.title.label')}</Label
+      >
       <Input
         type="text"
         id="title"
@@ -26,13 +42,14 @@
         required
         class="min-w-[17em] max-w-[25em]"
         bind:value={settings.title}
+        oninput={onSaveTitleDebounced}
         autocorrect="off"
       />
       <Button
         class="ml-2 border-none {settings.isTitleDirty ? '' : 'invisible'}"
         outline
         size="xs"
-        onclick={() => settingsService.saveTitle()}
+        onclick={onSaveTitle}
       >
         <FloppyDiskOutline />
       </Button>
@@ -53,9 +70,7 @@
             outline
             size="xs"
             class="ml-2 border-none text-green-600 hover:bg-green-600 hover:text-white"
-            onclick={() => {
-              settingsService.addDevice();
-            }}
+            onclick={onAddDevice}
           >
             <PlusOutline />
           </Button>
@@ -64,11 +79,11 @@
           class="col-span-6 grid grid-cols-subgrid gap-y-2"
           handle=".handle"
           onSort={(e) => {
-            settingsService.sortDevices(e.oldIndex, e.newIndex);
+            onSortDevices(e.oldIndex, e.newIndex);
           }}
         >
           {#each settings.devices as device (device.id)}
-            <DeviceEdit {device} />
+            <DeviceEdit {device} {onSaveDevice} {onRemoveDevice} />
           {/each}
         </SortableList>
       </div>

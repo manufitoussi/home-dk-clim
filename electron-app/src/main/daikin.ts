@@ -1,5 +1,21 @@
 import { ipcMain } from 'electron';
-import axios from 'axios';
+
+const fetchIt = async (url: string, options: RequestInit, timeout = 10000) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    return response;
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Request timed out');
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+};
 
 const parseKeyValueString = (keyValueString: string) => {
   const keyValues = keyValueString.split(',');
@@ -25,7 +41,7 @@ export const parseBasicInfo = (txt: string) => {
 };
 
 export const parseSensorInfo = (txt: string) => {
-    return parseKeyValueString(txt);
+  return parseKeyValueString(txt);
 };
 
 export const parseControlInfo = (txt: string) => {
@@ -39,10 +55,8 @@ export const getBasicInfo = async (ip: string) => {
 };
 
 export const getSensorInfo = async (ip: string) => {
-  const result = await axios.get(`http://${ip}/aircon/get_sensor_info`, {
-    timeout: 3000,
-  });
-  const text = result.data;
+  const result = await fetchIt(`http://${ip}/aircon/get_sensor_info`, {}, 3000);
+  const text = await result.text();
   return parseSensorInfo(text);
 };
 

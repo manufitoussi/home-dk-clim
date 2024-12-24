@@ -85,6 +85,7 @@ export default class SettingsService extends Service {
     try {
       return await window.api.settings.validateIp(ip);
     } catch (error) {
+      console.error(error);
       const e = error as { message: string };
       e.message = e.message.replace("Error invoking remote method 'settings:device:validate':", '');
       throw e;

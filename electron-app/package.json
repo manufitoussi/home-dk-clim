@@ -22,7 +22,6 @@
     "build:linux": "npm run build && electron-builder --linux"
   },
   "dependencies": {
-    "axios": "^1.7.9",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "electron-serve": "^2.1.1"

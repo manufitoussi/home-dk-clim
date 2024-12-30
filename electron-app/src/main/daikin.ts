@@ -1,21 +1,5 @@
 import { ipcMain } from 'electron';
-
-const fetchIt = async (url: string, options: RequestInit, timeout = 10000) => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-  try {
-    const response = await fetch(url, { ...options, signal: controller.signal });
-    return response;
-  } catch (error) {
-    if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error('Request timed out');
-    }
-
-    throw error;
-  } finally {
-    clearTimeout(timeoutId);
-  }
-};
+import { get } from './fetch';
 
 const parseKeyValueString = (keyValueString: string) => {
   const keyValues = keyValueString.split(',');
@@ -30,7 +14,7 @@ const parseKeyValueString = (keyValueString: string) => {
   return obj;
 };
 
-export const parseBasicInfo = (txt: string) => {
+const parseBasicInfo = (txt: string) => {
   var obj = parseKeyValueString(txt);
   if (!obj) return null;
   if (!obj.name) return null;
@@ -40,35 +24,43 @@ export const parseBasicInfo = (txt: string) => {
   return obj;
 };
 
-export const parseSensorInfo = (txt: string) => {
+const parseSensorInfo = (txt: string) => {
   return parseKeyValueString(txt);
 };
 
-export const parseControlInfo = (txt: string) => {
+const parseControlInfo = (txt: string) => {
   return parseKeyValueString(txt);
 };
 
 export const getBasicInfo = async (ip: string) => {
-  const result = await fetch(`http://${ip}/common/basic_info`);
-  const text = await result.text();
+  const response = await get(`http://${ip}/common/basic_info`, { timeout: 3000 });
+  if (!response.ok)
+    throw new Error(`Failed to get basic info from ${ip}, status: ${response.status}`);
+  const text = await response.text();
   return parseBasicInfo(text);
-};
+  };
 
 export const getSensorInfo = async (ip: string) => {
-  const result = await fetchIt(`http://${ip}/aircon/get_sensor_info`, {}, 3000);
-  const text = await result.text();
+  const response = await get(`http://${ip}/aircon/get_sensor_info`);
+  if (!response.ok)
+    throw new Error(`Failed to get sensor info from ${ip}, status: ${response.status}`);
+  const text = await response.text();
   return parseSensorInfo(text);
-};
+  };
 
 export const getControlInfo = async (ip: string) => {
-  const result = await fetch(`http://${ip}/aircon/get_control_info`);
-  const text = await result.text();
+  const response = await get(`http://${ip}/aircon/get_control_info`);
+  if (!response.ok)
+    throw new Error(`Failed to get control info from ${ip}, status: ${response.status}`);
+  const text = await response.text();
   return parseControlInfo(text);
 };
 
 export const setControlInfo = async (ip: string, request: string) => {
-  const result = await fetch(`http://${ip}/aircon/set_control_info?${request}`);
-  const text = await result.text();
+  const response = await get(`http://${ip}/aircon/set_control_info?${request}`);
+  if (!response.ok)
+    throw new Error(`Failed to set control info from ${ip}, status: ${response.status}`);
+  const text = await response.text();
   return parseControlInfo(text);
 };
 

@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
+import { getBasicInfo } from './daikin';
 import Store from './store';
-import { getSensorInfo } from './daikin';
 
 export type AddDeviceArgs = { ip: string; name: string; picture: string; icon: string };
 export type Device = { id: string } & AddDeviceArgs;
@@ -74,15 +74,10 @@ ipcMain.on('settings:device:sort', async (_, oldIndex: number, newIndex: number)
 
 ipcMain.handle('settings:device:validate', async (_, ip: string) => {
   try {
-    await getSensorInfo(ip);
+    await getBasicInfo(ip);
     return true;
   } catch (error) {
-    const e = error as { message: string };
-    if (e.message?.includes('timeout')) {
-      return false;
-    } else {
-      throw e;
-    }
+    return false;
   }
 });
 

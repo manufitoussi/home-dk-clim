@@ -1,12 +1,34 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%sveltekit.assets%/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    %sveltekit.head%
-  </head>
-  <body data-sveltekit-preload-data="hover" class="h-screen overflow-hidden">
-    <div style="display: contents">%sveltekit.body%</div>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  %sveltekit.head%
+</head>
+
+<body data-sveltekit-preload-data="hover" class="h-screen overflow-hidden">
+  <div style="display: contents">%sveltekit.body%</div>
+  
+  <div id="spashscreen" >
+    <img src="%sveltekit.assets%/splashscreen.svg" alt="logo" class="w-128 h-128" />
+  </div>
+  <style>
+    #spashscreen {
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+
+</body>
+
 </html>

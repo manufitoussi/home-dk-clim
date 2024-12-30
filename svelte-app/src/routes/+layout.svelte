@@ -13,7 +13,7 @@
   const { settings } = data;
 </script>
 
-<div in:fade|global class="flex h-screen w-full flex-1 flex-col overflow-hidden">
+<div in:fade|global class="flex h-screen w-full flex-1 flex-col overflow-hidden bg-white">
   <div class="flex items-center gap-1 bg-[#216dcb] p-2 text-white">
     {#if activeUrl === '/settings'}
       <div in:fly={{ x: '100%' }} class="flex flex-1 items-center gap-1">

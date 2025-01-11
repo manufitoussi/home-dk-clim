@@ -1,4 +1,4 @@
-type Constructor<I> = new (...args: unknown[]) => I;
+export type Constructor<I> = new (...args: unknown[]) => I;
 
 export const _container_ = new Map<string, Constructor<unknown>>();
 
@@ -59,6 +59,14 @@ export function unregister(key: string) {
  */
 export function reset(key: string) {
   _instances_.delete(key);
+}
+
+/**
+ * Clear all instances and the container.
+ */
+export function clear() {
+  _instances_.clear();
+  _container_.clear();
 }
 
 type InjectedMetadata = Map<string, string>;

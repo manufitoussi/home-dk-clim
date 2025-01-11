@@ -38,7 +38,7 @@ export const getBasicInfo = async (ip: string) => {
     throw new Error(`Failed to get basic info from ${ip}, status: ${response.status}`);
   const text = await response.text();
   return parseBasicInfo(text);
-  };
+};
 
 export const getSensorInfo = async (ip: string) => {
   const response = await get(`http://${ip}/aircon/get_sensor_info`);
@@ -46,7 +46,7 @@ export const getSensorInfo = async (ip: string) => {
     throw new Error(`Failed to get sensor info from ${ip}, status: ${response.status}`);
   const text = await response.text();
   return parseSensorInfo(text);
-  };
+};
 
 export const getControlInfo = async (ip: string) => {
   const response = await get(`http://${ip}/aircon/get_control_info`);

@@ -1,12 +1,20 @@
-export default class DeviceModel {
+import type IModel from '$lib/bases/imodel';
+
+type MemorizedModel = {
+  id: string;
+  ip: string;
+  name: string;
+  picture: string;
+  icon: string;
+};
+export default class DeviceModel implements IModel<MemorizedModel> {
   id = $state('');
   ip = $state('');
   name = $state('');
   picture = $state('');
   icon = $state('air-vent');
 
-  memorized: { id: string; ip: string; name: string; picture: string; icon: string } | null =
-    $state(null);
+  memorized: MemorizedModel | null = $state(null);
 
   memorize() {
     this.memorized = {
@@ -27,5 +35,9 @@ export default class DeviceModel {
         this.picture !== this.memorized.picture ||
         this.icon !== this.memorized.icon)
     );
+  }
+
+  get isMemorized(): boolean {
+    return this.memorized !== null;
   }
 }

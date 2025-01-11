@@ -7,7 +7,7 @@
     "devices": "Appareils",
     "device": "Appareil",
     "device-looking-for": "Recherche de l'appareil...",
-    "device-not-found": "Appareil non trouvé.",
+    "device-not-found": "Aucun appareil à cette adresse.",
     "device-found": "Appareil trouvé.",
     "device-edit": {
       "name": {

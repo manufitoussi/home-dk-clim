@@ -8,4 +8,9 @@ export default defineConfig({
       }
     : undefined,
   plugins: [sveltekit()],
+  test: {
+    coverage: {
+      include: ['src/**/*.ts', 'src/**/*.svelte'],
+    },
+  },
 });

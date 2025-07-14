@@ -26,10 +26,7 @@ const onSortDevices = async (oldIndex: number, newIndex: number) => {
 };
 
 const onValidateIp =  async (ip: string) => {
-  console.log('onValidateIp', ip);
-  const isValid = await settingsService.validateIp(ip);
-  console.log(isValid);
-  return isValid;
+  return await settingsService.validateIp(ip);
 }
 
 export const load: PageLoad = async ({ parent }) => {

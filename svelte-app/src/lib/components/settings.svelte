@@ -16,6 +16,9 @@
     onAddDevice: () => void;
     onSortDevices: (oldIndex: number, newIndex: number) => void;
     onValidateIp: (ip: string) => Promise<boolean>;
+    onSaveImage: (base64: string, oldFilePath: string | null) => Promise<string | null>;
+    onRemoveImage: (filePath: string) => Promise<boolean>;
+    onGetImage: (filePath: string) => Promise<string | null>;
   }
 
   const {
@@ -26,6 +29,9 @@
     onSaveDevice,
     onRemoveDevice,
     onValidateIp,
+    onSaveImage,
+    onRemoveImage,
+    onGetImage,
   }: Props = $props();
 
   const onSaveTitleDebounced = debounce(onSaveTitle);
@@ -55,7 +61,7 @@
     <div class="mt-12">
       <h2 class="text-lg font-bold">{$_('settings.devices')}</h2>
       <div
-        class="grid grid-cols-[minmax(5em,_7em)_minmax(12em,_17em)_minmax(9em,_11em)_2em_3em_2em_3em] place-items-center gap-x-2"
+        class="grid grid-cols-[minmax(5em,_7em)_minmax(12em,_17em)_minmax(9em,_11em)_6em_2em_3em_2em_3em] place-items-center gap-x-2"
       >
         <div class="font-bold">{$_('settings.device-edit.icon.label')}</div>
         <div class="font-bold">{$_('settings.device-edit.name.label')}</div>
@@ -86,6 +92,9 @@
               {onSaveDevice}
               {onRemoveDevice}
               {onValidateIp}
+              {onSaveImage}
+              {onRemoveImage}
+              {onGetImage}
             />
           {/each}
         </SortableList>

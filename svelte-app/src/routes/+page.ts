@@ -4,15 +4,17 @@ import type { PageLoad } from './$types';
 const settingsService = useSettingsService();
 
 const onValidateIp = async (ip: string) => {
-  console.log('onValidateIp', ip);
-  const isValid = await settingsService.validateIp(ip);
-  console.log(isValid);
-  return isValid;
+  return await settingsService.validateIp(ip);
+};
+
+const onGetImage = async (filePath: string) => {
+  return await settingsService.getImage(filePath);
 };
 
 export const load: PageLoad = async ({ parent }) => {
   return {
     onValidateIp,
+    onGetImage,
     ...(await parent()),
   };
 };

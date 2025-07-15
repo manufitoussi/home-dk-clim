@@ -91,6 +91,18 @@ export default class SettingsService extends Service {
       throw e;
     }
   }
+
+  async saveImage(base64: string, oldFilePath: string | null): Promise<string | null> {
+    return await window.api.settings.saveImage(base64, oldFilePath);
+  }
+
+  async removeImage(filePath: string): Promise<boolean> {
+    return await window.api.settings.deleteImage(filePath);
+  }
+
+  async getImage(filePath: string): Promise<string | null> {
+    return await window.api.settings.getImage(filePath);
+  }
 }
 
 register('service:settings', SettingsService);

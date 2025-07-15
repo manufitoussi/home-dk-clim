@@ -23,6 +23,13 @@ const api = {
       ipcRenderer.send('settings:device:sort', oldIndex, newIndex),
 
     validateIp: (ip: string) => ipcRenderer.invoke('settings:device:validate', ip),
+
+    saveImage: (base64: string, oldFilePath: string | null) =>
+      ipcRenderer.invoke('settings:image:save', { base64, oldFilePath }),
+
+    deleteImage: (filePath: string) => ipcRenderer.invoke('settings:image:delete', filePath),
+
+    getImage: (filePath: string) => ipcRenderer.invoke('settings:image:get', filePath),
   },
 };
 

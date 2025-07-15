@@ -3,6 +3,9 @@
     onSaveDevice: (device: DeviceModel) => void;
     onRemoveDevice: (device: DeviceModel) => void;
     onValidateIp: (ip: string) => Promise<boolean>;
+    onSaveImage: (base64: string, oldFilePath: string | null) => Promise<string | null>;
+    onRemoveImage: (filePath: string) => Promise<boolean>;
+    onGetImage: (filePath: string) => Promise<string | null>;
   }
   export interface DeviceEditProps extends MangageDeviceProps {
     device: DeviceModel;
@@ -19,6 +22,7 @@
     FloppyDiskOutline,
     SortOutline,
     TrashBinOutline,
+    ImageOutline,
   } from 'flowbite-svelte-icons';
   import { _ } from 'svelte-i18n';
   import { slide } from 'svelte/transition';
@@ -29,12 +33,55 @@
     onSaveDevice,
     onRemoveDevice,
     onValidateIp,
+    onSaveImage,
+    onRemoveImage,
+    onGetImage,
   }: DeviceEditProps = $props();
   let dropdownIconOpen = $state(false);
 
   const onSaveDeviceDebounced = debounce(onSaveDevice);
 
   let isValid = $state(false);
+  let imagePreview = $state('');
+
+  $effect(() => {
+    if (device.picture) {
+      onGetImage(device.picture).then((base64) => {
+        if (base64) {
+          imagePreview = base64;
+        }
+      });
+    }
+  });
+
+  const onFileSelected = (e: Event) => {
+    const input = e.target as HTMLInputElement;
+    if (!input.files?.length) {
+      return;
+    }
+
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64 = reader.result as string;
+      const filePath = await onSaveImage(base64, device.picture);
+      if (filePath) {
+        device.picture = filePath;
+        imagePreview = base64;
+        onSaveDeviceDebounced(device);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const onRemovePicture = async () => {
+    if (device.picture) {
+      await onRemoveImage(device.picture);
+      device.picture = '';
+      imagePreview = '';
+      onSaveDeviceDebounced(device);
+    }
+  };
 </script>
 
 {#snippet iconComponent(icon: string)}
@@ -45,7 +92,7 @@
   in:slide={{ axis: 'y', duration: 250 }}
   out:slide={{ axis: 'y', duration: 250 }}
   id={device.id}
-  class="group col-start-1 col-end-8 grid max-h-11 grid-cols-subgrid overflow-visible"
+  class="group col-start-1 col-end-9 grid max-h-11 grid-cols-subgrid overflow-visible"
 >
   <div class="contents">
     <Button outline size="xs" class="border-none" color="light">
@@ -70,7 +117,7 @@
   <Input
     type="text"
     id="name"
-    placeholder="Device name"
+    placeholder={$_('device.name.description')}
     required
     bind:value={device.name}
     oninput={() => {
@@ -90,6 +137,29 @@
     }}
     autocorrect="off"
   />
+
+  <div class="flex items-center justify-start">
+    <input type="file" id="{device.id}-file-upload" class="hidden" onchange={onFileSelected} accept="image/*" />
+    <Button
+      outline
+      size="xs"
+      class="border-none w-12"
+      color="light"
+      title={$_('device.picture.upload')}
+      onclick={() => document.getElementById(`${device.id}-file-upload`)?.click()}
+    >
+    {#if imagePreview}
+      <div class="h-6 w-6 rounded bg-contain bg-center bg-no-repeat" style="background-image: url({imagePreview})"></div>
+    {:else}
+      +<ImageOutline />
+    {/if}
+    </Button>
+    {#if imagePreview}
+      <button class="border-none px-2 opacity-0 rounded hover:bg-gray-100 group-hover:opacity-100" onclick={onRemovePicture} title={$_('device.picture.remove')}>
+        ×
+      </button>
+    {/if}
+  </div>
 
   <DeviceValidStatus {device} {onValidateIp} bind:isValid />
 

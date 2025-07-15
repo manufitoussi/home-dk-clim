@@ -81,4 +81,16 @@ ipcMain.handle('settings:device:validate', async (_, ip: string) => {
   }
 });
 
+ipcMain.handle('settings:image:save', async (_, { base64, oldFilePath }: { base64: string; oldFilePath: string | null }) => {
+  return settings.savePicture(base64, oldFilePath);
+});
+
+ipcMain.handle('settings:image:delete', async (_, filePath: string) => {
+  return settings.deletePicture(filePath);
+});
+
+ipcMain.handle('settings:image:get', async (_, filePath: string) => {
+  return settings.getPicture(filePath);
+});
+
 export default settings;

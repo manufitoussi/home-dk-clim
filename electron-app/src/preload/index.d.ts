@@ -17,6 +17,9 @@ declare global {
         updateDevice: (device: Device) => Promise<void>;
         sortDevices: (oldIndex: number, newIndex: number) => Promise<void>;
         validateIp: (ip: string) => Promise<boolean>;
+        saveImage: (base64: string, oldFilePath: string | null) => Promise<string | null>;
+        deleteImage: (filePath: string) => Promise<boolean>;
+        getImage: (filePath: string) => Promise<string | null>;
       };
     };
   }

@@ -13,7 +13,6 @@ const onAddDevice = async () => {
 };
 
 const onSaveDevice = async (device: DeviceModel) => {
-  console.log('onSaveDevice', device);
   await settingsService.saveDevice(device);
 };
 
@@ -29,6 +28,18 @@ const onValidateIp =  async (ip: string) => {
   return await settingsService.validateIp(ip);
 }
 
+const onSaveImage = async (base64: string, oldFilePath: string | null) => {
+  return await settingsService.saveImage(base64, oldFilePath);
+};
+
+const onRemoveImage = async (filePath: string) => {
+  return await settingsService.removeImage(filePath);
+};
+
+const onGetImage = async (filePath: string) => {
+  return await settingsService.getImage(filePath);
+};
+
 export const load: PageLoad = async ({ parent }) => {
   return {
     onSaveTitle,
@@ -37,6 +48,9 @@ export const load: PageLoad = async ({ parent }) => {
     onAddDevice,
     onSortDevices,
     onValidateIp,
+    onSaveImage,
+    onRemoveImage,
+    onGetImage,
     ...(await parent()),
   };
 };

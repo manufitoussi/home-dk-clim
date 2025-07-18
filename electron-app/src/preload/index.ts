@@ -31,6 +31,17 @@ const api = {
 
     getImage: (filePath: string) => ipcRenderer.invoke('settings:image:get', filePath),
   },
+  
+  daikin: {
+    getBasicInfo: (ip: string) => ipcRenderer.invoke('daikin:get-basic-info', ip),
+
+    getSensorInfo: (ip: string) => ipcRenderer.invoke('daikin:get-sensor-info', ip),
+
+    getControlInfo: (ip: string) => ipcRenderer.invoke('daikin:get-control-info', ip),
+
+    setControlInfo: (ip: string, request: string) =>
+      ipcRenderer.invoke('daikin:set-control-info', ip, request),
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -21,6 +21,12 @@ declare global {
         deleteImage: (filePath: string) => Promise<boolean>;
         getImage: (filePath: string) => Promise<string | null>;
       };
+      daikin: {
+        getBasicInfo: (ip: string) => Promise<{ name: string; mac: string } | null>;
+        getSensorInfo: (ip: string) => Promise<{ [key: string]: string } | null>;
+        getControlInfo: (ip: string) => Promise<{ [key: string]: string } | null>;
+        setControlInfo: (ip: string, request: string) => Promise<{ [key: string]: string } | null>;
+      };
     };
   }
 }

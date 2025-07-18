@@ -16,7 +16,8 @@
   let currentMode = $state<'cold' | 'hot'>('cold');
   let outsideConditionMode = $derived<'cold' | 'hot'>(currentMode === 'cold' ? 'hot' : 'cold');
 
-  const { settings } = data;
+  const { settings, daikinService } = data;
+ 
 </script>
 
 {#snippet conditionModeIconComponent(mode: 'cold' | 'hot')}
@@ -63,7 +64,7 @@
 
         <div class="flex items-center gap-1 text-xl">
           <ConditionMode mode={outsideConditionMode} /> <div class="mx-3 flex items-center gap-1 text-2xl font-semibold">
-            9°C
+            {daikinService.outdoorTemperature}°C
           </div>
         </div>
         <NavButton><RefreshCcw /></NavButton>

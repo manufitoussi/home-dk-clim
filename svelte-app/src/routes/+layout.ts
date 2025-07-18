@@ -6,7 +6,7 @@ import { browser } from '$app/environment';
 import '$lib/i18n';
 import { locale, waitLocale } from 'svelte-i18n';
 
-import { useSettingsService } from '$lib';
+import { useSettingsService, useDaikinService } from '$lib';
 import '$lib/services/settings';
 
 export const load = async () => {
@@ -17,9 +17,11 @@ export const load = async () => {
   await waitLocale();
 
   const settingsService = useSettingsService();
+  const daikinService = useDaikinService();
   await settingsService.load();
   return {
     settingsService,
     settings: settingsService.settings,
+    daikinService,
   };
 };

@@ -6,6 +6,10 @@ import SettingsService from '$lib/services/settings';
 export const useSettingsService = () =>
   lookup<SettingsService>('service:settings');
 
+import DaikinService from '$lib/services/daikin.svelte';
+export const useDaikinService = () =>
+  lookup<DaikinService>('service:daikin');
+
 // debounce a function
 export function debounce<T extends (...args: any[]) => void>(
   func: T,

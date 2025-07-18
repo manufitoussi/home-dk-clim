@@ -1,8 +1,8 @@
 import { ipcMain } from 'electron';
 import { get } from './fetch';
 
-const parseKeyValueString = (keyValueString: string) => {
-  const keyValues = keyValueString.split(',');
+const parseKeyValueString = (keyValuesString: string) => {
+  const keyValues = keyValuesString.split(',');
   if (keyValues.length === 0) return null;
 
   const obj: { [key: string]: string } = {};
@@ -65,18 +65,18 @@ export const setControlInfo = async (ip: string, request: string) => {
 };
 
 // IPC handlers
-ipcMain.on('daikin:get-basic-info', async (_, ip) => {
+ipcMain.handle('daikin:get-basic-info', async (_, ip) => {
   return getBasicInfo(ip);
 });
 
-ipcMain.on('daikin:get-sensor-info', async (_, ip) => {
+ipcMain.handle('daikin:get-sensor-info', async (_, ip) => {
   return getSensorInfo(ip);
 });
 
-ipcMain.on('daikin:get-control-info', async (_, ip) => {
+ipcMain.handle('daikin:get-control-info', async (_, ip) => {
   return getControlInfo(ip);
 });
 
-ipcMain.on('daikin:set-control-info', async (_, ip, request) => {
+ipcMain.handle('daikin:set-control-info', async (_, ip, request) => {
   return setControlInfo(ip, request);
 });

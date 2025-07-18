@@ -64,7 +64,7 @@
 
 <div
   in:fade|global={{ delay: 250 }}
-  class="relative flex h-60 w-96 flex-col rounded border"
+  class="relative flex h-60 w-96 flex-col rounded border shadow-xl"
   style="background-image: url({imagePreview}); background-size: cover; background-position: center;"
 >
   <div
@@ -83,9 +83,9 @@
     {#if isInitializing}
       <span class="text-gray-400">INITIALIZING...</span>
     {:else if isValid}
-      <div class="flex items-center gap-2">
-        <Thermometer size={32} />
-        <span class="text-3xl">{indoorTemperature}</span>
+      <div class="flex items-center gap-2 ">
+        <Thermometer size={46} />
+        <span class="text-3xl font-bold">{indoorTemperature}</span>
       </div>
     {:else}
       <span class="text-red-500">INVALID DEVICE</span>

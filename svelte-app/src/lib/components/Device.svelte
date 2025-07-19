@@ -64,7 +64,7 @@
 
 <div
   in:fade|global={{ delay: 250 }}
-  class="relative flex h-60 w-96 flex-col rounded border shadow-xl"
+  class="relative flex h-60 w-96 flex-col rounded-lg border overflow-hidden border-gray-200 shadow-xl"
 >
   {#if imagePreview}
     <div
@@ -77,10 +77,10 @@
     ></div>
   {/if}
   <div
-    class="relative flex w-full items-center gap-2 border-bottom rounded rounded-b-none {imagePreview
-      ? ''
-      : 'text-white'} p-3"
-    style="background-color: {imagePreview ? '#FFFFFF60' : '#4b5563'}; backdrop-filter: blur({imagePreview ? '2px' : '0px'});"
+    class="relative flex w-full items-center gap-2 border-bottom  {imagePreview
+      ? 'bg-white/50 backdrop-blur-sm'
+      : 'text-white bg-gray-600'} p-3"
+    
   >
     <DeviceIcon icon={device.icon} />
     {device.name}
@@ -89,9 +89,9 @@
     {#if isInitializing}
       <span class="text-gray-400">INITIALIZING...</span>
     {:else if isValid}
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1">
         <Thermometer size={46} />
-        <span class="text-3xl font-bold">{indoorTemperature}</span>
+        <div class="flex"><span class="text-3xl font-bold">{indoorTemperature}</span><span class="self-start mt-1 text-base">°C</span></div>
       </div>
     {:else}
       <span class="text-red-500">INVALID DEVICE</span>
@@ -99,7 +99,7 @@
   </div>
   <div class="h-16"></div>
   <DeviceValidStatus
-    className="absolute bottom-1 right-1 opacity-30 hover:opacity-100"
+    className="absolute top-3 right-1 opacity-30 hover:opacity-100"
     {device}
     {onValidateIp}
     bind:isValid

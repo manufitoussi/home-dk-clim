@@ -64,7 +64,7 @@
 
         <div class="flex items-center gap-1 text-xl">
           <ConditionMode mode={outsideConditionMode} /> <div class="mx-3 flex items-center gap-1 text-2xl font-semibold">
-            {daikinService.outdoorTemperature}°C
+            <span class="font-bold">{daikinService.outdoorTemperature}</span><span class="align-top text-sm ">°C</span>
           </div>
         </div>
         <NavButton><RefreshCcw /></NavButton>

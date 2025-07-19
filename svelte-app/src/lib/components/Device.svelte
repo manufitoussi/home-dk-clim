@@ -65,25 +65,31 @@
 <div
   in:fade|global={{ delay: 250 }}
   class="relative flex h-60 w-96 flex-col rounded border shadow-xl"
-  style="background-image: url({imagePreview}); background-size: cover; background-position: center;"
 >
+  {#if imagePreview}
+    <div
+      class="absolute inset-0"
+      style="background-image: url({imagePreview}); background-size: cover; background-position: center;"
+    ></div>
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-white to-transparent opacity-100"
+      style=""
+    ></div>
+  {/if}
   <div
-    class="absolute inset-0 rounded bg-black opacity-50"
-    style="display: {imagePreview ? 'block' : 'none'};"
-  ></div>
-  <div
-    class="relative flex w-full items-center gap-2 rounded rounded-b-none {imagePreview
+    class="relative flex w-full items-center gap-2 border-bottom rounded rounded-b-none {imagePreview
       ? ''
-      : 'bg-gray-600'} p-3 text-white"
+      : 'text-white'} p-3"
+    style="background-color: {imagePreview ? '#FFFFFF60' : '#4b5563'}; backdrop-filter: blur({imagePreview ? '2px' : '0px'});"
   >
     <DeviceIcon icon={device.icon} />
     {device.name}
   </div>
-  <div class="relative flex h-full items-center p-4 text-white">
+  <div class="relative flex h-full items-center p-4 text-gray-700">
     {#if isInitializing}
       <span class="text-gray-400">INITIALIZING...</span>
     {:else if isValid}
-      <div class="flex items-center gap-2 ">
+      <div class="flex items-center gap-2">
         <Thermometer size={46} />
         <span class="text-3xl font-bold">{indoorTemperature}</span>
       </div>

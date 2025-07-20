@@ -25,7 +25,7 @@ declare global {
         getBasicInfo: (ip: string) => Promise<{ name: string; mac: string } | null>;
         getSensorInfo: (ip: string) => Promise<{ [key: string]: string } | null>;
         getControlInfo: (ip: string) => Promise<{ [key: string]: string } | null>;
-        setControlInfo: (ip: string, request: string) => Promise<{ [key: string]: string } | null>;
+        setControlInfo: (ip: string, controlParams: string) => Promise<{ [key: string]: string } | null>;
       };
     };
   }

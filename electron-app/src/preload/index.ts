@@ -31,7 +31,7 @@ const api = {
 
     getImage: (filePath: string) => ipcRenderer.invoke('settings:image:get', filePath),
   },
-  
+
   daikin: {
     getBasicInfo: (ip: string) => ipcRenderer.invoke('daikin:get-basic-info', ip),
 
@@ -39,8 +39,8 @@ const api = {
 
     getControlInfo: (ip: string) => ipcRenderer.invoke('daikin:get-control-info', ip),
 
-    setControlInfo: (ip: string, request: string) =>
-      ipcRenderer.invoke('daikin:set-control-info', ip, request),
+    setControlInfo: (ip: string, controlParams: string) =>
+      ipcRenderer.invoke('daikin:set-control-info', ip, controlParams),
   },
 };
 

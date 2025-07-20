@@ -56,8 +56,9 @@ export const getControlInfo = async (ip: string) => {
   return parseControlInfo(text);
 };
 
-export const setControlInfo = async (ip: string, request: string) => {
-  const response = await get(`http://${ip}/aircon/set_control_info?${request}`);
+export const setControlInfo = async (ip: string, controlParams: string) => {
+  console.log(`Setting control info for ${ip} with params: ${controlParams}`);
+  const response = await get(`http://${ip}/aircon/set_control_info?${controlParams}`);
   if (!response.ok)
     throw new Error(`Failed to set control info from ${ip}, status: ${response.status}`);
   const text = await response.text();
@@ -77,6 +78,6 @@ ipcMain.handle('daikin:get-control-info', async (_, ip) => {
   return getControlInfo(ip);
 });
 
-ipcMain.handle('daikin:set-control-info', async (_, ip, request) => {
-  return setControlInfo(ip, request);
+ipcMain.handle('daikin:set-control-info', async (_, ip, controlParams) => {
+  return setControlInfo(ip, controlParams);
 });

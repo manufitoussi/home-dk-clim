@@ -79,7 +79,7 @@
 
   {#if activeUrl !== '/settings'}
     <div
-      transition:fly={{ y: '100%', delay: 500 }}
+      in:fly|global={{ y: '100%', delay: 1000 }} out:fly|global={{ y: '100%' }}
       class="absolute bottom-2 right-2 flex items-center gap-2 overflow-visible"
     >
       {daikinService.devices.filter((d) => d.isOn).length} / {daikinService

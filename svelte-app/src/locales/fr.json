@@ -1,26 +1,46 @@
 {
+  "main": {
+    "default-app-title": "Climatisation",
+    "outdoor-temperature": "Température extérieure",
+    "all-switch-off": "Tout éteindre",
+    "all-switch-on": "Tout allumer",
+    "cold-mode": "Mode froid",
+    "hot-mode": "Mode chaud",
+    "device": {
+      "initializing": "Initialisation de l'appareil...",
+      "not-found": "Aucun appareil trouvé."
+    }
+  },
   "settings": {
+    "page-title": "Paramètres",
     "title": {
       "label": "Titre",
-      "description": "Titre à afficher dans la vue principale."
+      "description": "Titre de la vue principale."
     },
     "devices": "Appareils",
     "device": "Appareil",
     "device-looking-for": "Recherche de l'appareil...",
     "device-not-found": "Aucun appareil à cette adresse.",
     "device-found": "Appareil trouvé.",
+    "new-device-name": "Nouvel appareil",
     "device-edit": {
       "name": {
         "label": "Nom",
-        "description": "Nom de l'appareil à afficher dans la vue principale."
+        "description": "Nom de l'appareil."
       },
       "ip": {
         "label": "IP",
-        "description": "Adresse IP de l'appareil à connecter."
+        "description": "Adresse IP de l'appareil."
       },
       "icon": {
         "label": "Icône",
-        "description": "Icône à afficher pour l'appareil dans la vue principale."
+        "description": "Icône de l'appareil."
+      },
+      "picture": {
+        "label": "Image",
+        "description": "Image de l'appareil.",
+        "choice": "Selectionner une image",
+        "remove": "Supprimer l'image"
       }
     }
   }

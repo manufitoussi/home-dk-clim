@@ -1,9 +1,10 @@
 <script lang="ts">
-  import type { Dir, Pow, Rate, ControlInfo } from '$lib';
+  import type { ControlInfo, Dir, Pow, Rate } from '$lib';
   import DeviceIcon from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
   import { Toggle } from 'flowbite-svelte';
-  import { Thermometer, Power } from 'lucide-svelte';
+  import { Power, Thermometer } from 'lucide-svelte';
+  import { _ } from 'svelte-i18n';
   import { scale } from 'svelte/transition';
   import DeviceValidStatus from './DeviceValidStatus.svelte';
   interface Props {
@@ -20,14 +21,6 @@
     ) => Promise<ControlInfo>;
   }
 
-  const isActiveFromPow = (pow: Pow) => {
-    return Boolean(parseFloat(pow));
-  };
-
-  const powFromIsActive = (isActive: boolean): Pow => {
-    return isActive ? '1' : '0';
-  };
-
   let {
     device,
     onValidateIp,
@@ -35,14 +28,13 @@
     onGetTemperatures,
     onGetControlInfo,
     onSetControlInfo,
-  } = $props();
+  }: Props = $props();
   let isValid = $state(false);
   let isInitializing = $state(true);
   let imagePreview = $state('');
   let indoorTemperature = $state('');
   let timeout = $state<ReturnType<typeof setTimeout> | null>(null);
 
-  let isActive = $derived(isActiveFromPow(device.controlInfo?.pow || '0'));
   let dir = $state<Dir>('0');
   let rate = $state<Rate>('A');
 
@@ -59,14 +51,14 @@
   };
 
   const switchActive = async () => {
-    const newPow: Pow = powFromIsActive(!isActive);
-    device.controlInfo.pow = newPow;
+    device.toggleSwitch();
     const result = await onSetControlInfo?.(device.ip, device.controlInfo);
+    console.log('Switch result:', result);
   };
 
   $effect(() => {
     if (device.picture) {
-      onGetImage(device.picture).then((base64: string) => {
+      onGetImage(device.picture).then((base64: string | null) => {
         if (base64) {
           imagePreview = base64;
         }
@@ -101,7 +93,7 @@
 >
   {#if imagePreview}
     <div
-      class="absolute inset-0 transition-[filter] duration-700 {isActive
+      class="absolute inset-0 transition-[filter] duration-700 {device.isOn
         ? 'saturate-100'
         : 'saturate-0'}"
       style="background-image: url({imagePreview}); background-size: cover; background-position: center;"
@@ -121,20 +113,20 @@
     {#if isValid}
       <Toggle
         class="group ms-auto"
-        checked={isActive}
+        checked={device.isOn}
         on:change={switchActive}
         color="green"
       >
         {#if false}
           <div class="relative">
             <Power
-              class="absolute inset-0 h-5 w-5 font-bold blur-sm {isActive
+              class="absolute inset-0 h-5 w-5 font-bold blur-sm {device.isOn
                 ? 'text-green-500 group-hover:invisible'
                 : 'invisible group-hover:visible group-hover:text-green-300'}"
               strokeWidth="3"
             />
             <Power
-              class="h-5 w-5 font-bold {isActive
+              class="h-5 w-5 font-bold {device.isOn
                 ? 'text-green-500 group-hover:text-gray-500'
                 : 'text-gray-500 group-hover:text-green-500'}"
               strokeWidth="2"
@@ -146,7 +138,7 @@
   </div>
   <div class="relative flex h-full items-center p-4 text-gray-700">
     {#if isInitializing}
-      <span class="text-gray-400">INITIALIZING...</span>
+      <span class="text-gray-400">{$_('main.device.initializing')}</span>
     {:else if isValid}
       <div class="flex items-center gap-1">
         <Thermometer size={46} />
@@ -157,7 +149,7 @@
         </div>
       </div>
     {:else}
-      <span class="text-red-500">INVALID DEVICE</span>
+      <span class="text-red-500">{$_('main.device.not-found')}</span>
     {/if}
   </div>
   <div class="h-16"></div>

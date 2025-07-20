@@ -30,14 +30,14 @@
 <div class="flex items-center justify-items-center {className}" {...others}>
   {#await onValidateIpDebounced(device.ip)}
     <Spinner size={5} />
-    <Tooltip>{$_('settings.device-looking-for')}</Tooltip>
+    <Tooltip class="whitespace-nowrap">{$_('settings.device-looking-for')}</Tooltip>
   {:then}
     {#if isValid}
       <Check color="green" />
-      <Tooltip>{$_('settings.device-found')}</Tooltip>
+      <Tooltip class="whitespace-nowrap">{$_('settings.device-found')}</Tooltip>
     {:else}
       <XIcon color="orange" />
-      <Tooltip>{$_('settings.device-not-found')}</Tooltip>
+      <Tooltip class="whitespace-nowrap">{$_('settings.device-not-found')}</Tooltip>
     {/if}
   {:catch error}
     <TriangleAlert color="red" />

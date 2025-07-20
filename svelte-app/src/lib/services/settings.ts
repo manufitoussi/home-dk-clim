@@ -2,6 +2,8 @@ import Service from '$lib/bases/service';
 import { register } from '$lib/container';
 import DeviceModel from '$lib/models/device.svelte';
 import SettingsModel from '$lib/models/settings.svelte';
+import { _ } from 'svelte-i18n';
+import { get } from 'svelte/store';
 
 export default class SettingsService extends Service {
   settings = new SettingsModel();
@@ -39,7 +41,7 @@ export default class SettingsService extends Service {
   addDevice() {
     const newDevice = {
       ip: '0.0.0.0',
-      name: 'New Device',
+      name: get(_)('settings.new-device-name'),
       picture: '',
       icon: 'air-vent',
     };

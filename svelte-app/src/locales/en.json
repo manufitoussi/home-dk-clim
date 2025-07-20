@@ -21,7 +21,27 @@
       "icon": {
         "label": "Icon",
         "description": "Icon to display for the device in main view."
+      },
+      "picture": {
+        "choice": "Select an image",
+        "description": "Image of the device.",
+        "label": "Picture",
+        "remove": "Delete the image"
       }
-    }
+    },
+    "new-device-name": "New device",
+    "page-title": "Parameters"
+  },
+  "main": {
+    "all-switch-off": "Switch off",
+    "all-switch-on": "Turn on everything",
+    "cold-mode": "Cold fashion",
+    "default-app-title": "Air conditioning",
+    "device": {
+      "initializing": "Initialization of the device ...",
+      "not-found": "No device found."
+    },
+    "hot-mode": "Hot fashion",
+    "outdoor-temperature": "Outdoor temperature"
   }
 }

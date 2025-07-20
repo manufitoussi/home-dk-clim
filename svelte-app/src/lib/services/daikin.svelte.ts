@@ -14,7 +14,7 @@ export default class DaikinService extends Service {
   isSomeOn = $derived(this.getIsSomeOn());
 
   getIsSomeOn() {
-    return this.devices.some((device) => device.controlInfo?.pow === '1');
+    return this.devices.some((device) => device.isOn);
   }
 
   async getBasicInfo(ip: string) {

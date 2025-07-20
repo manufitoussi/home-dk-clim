@@ -1,4 +1,5 @@
 import type IModel from '$lib/bases/imodel';
+import { type Pow } from '$lib';
 
 type MemorizedModel = {
   id: string;
@@ -7,17 +8,20 @@ type MemorizedModel = {
   picture: string;
   icon: string;
 };
+
+export const powFromIsActive = (isActive: boolean): Pow => {
+  return isActive ? '1' : '0';
+};
+
+export const isActiveFromPow = (pow: Pow): boolean => {
+  return pow === '1';
+};
 export default class DeviceModel implements IModel<MemorizedModel> {
   id = $state('');
   ip = $state('');
   name = $state('');
   picture = $state('');
   icon = $state('air-vent');
-
-  controlInfo = $state<{ [key: string]: string }>({});
-
-  isOn = $derived(this.controlInfo?.pow === '1');
-  isOff = $derived(this.controlInfo?.pow === '0');
 
   memorized: MemorizedModel | null = $state(null);
 
@@ -44,5 +48,26 @@ export default class DeviceModel implements IModel<MemorizedModel> {
 
   get isMemorized(): boolean {
     return this.memorized !== null;
+  }
+
+  controlInfo = $state<{ [key: string]: string }>({});
+
+  isOn = $derived(isActiveFromPow((this.controlInfo?.pow || '0') as Pow));
+  isOff = $derived(!isActiveFromPow((this.controlInfo?.pow || '0') as Pow));
+
+  switchOn() {
+    this.controlInfo.pow = powFromIsActive(true);
+  }
+
+  switchOff() {
+    this.controlInfo.pow = powFromIsActive(false);
+  }
+
+  toggleSwitch() {
+    if (this.isOn) {
+      this.switchOff();
+    } else {
+      this.switchOn();
+    }
   }
 }

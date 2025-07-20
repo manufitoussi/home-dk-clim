@@ -3,7 +3,10 @@
     onSaveDevice: (device: DeviceModel) => void;
     onRemoveDevice: (device: DeviceModel) => void;
     onValidateIp: (ip: string) => Promise<boolean>;
-    onSaveImage: (base64: string, oldFilePath: string | null) => Promise<string | null>;
+    onSaveImage: (
+      base64: string,
+      oldFilePath: string | null,
+    ) => Promise<string | null>;
     onRemoveImage: (filePath: string) => Promise<boolean>;
     onGetImage: (filePath: string) => Promise<string | null>;
   }
@@ -16,7 +19,7 @@
   import { debounce } from '$lib';
   import DeviceIcon, { ICONS } from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
-  import { Button, Dropdown, DropdownItem, Input } from 'flowbite-svelte';
+  import { Button, Dropdown, DropdownItem, Input, Tooltip } from 'flowbite-svelte';
   import {
     ChevronDownOutline,
     FloppyDiskOutline,
@@ -99,25 +102,25 @@
       {@render iconComponent(device.icon)}
       <ChevronDownOutline class="ms-2 h-6 w-6" />
     </Button>
-    <Dropdown class="col-start-2 col-end-3" bind:open={dropdownIconOpen}>
-      {#each Object.keys(ICONS) as icon}
-        <DropdownItem
-          class="flex w-[7em] items-center gap-2"
-          on:click={() => {
-            device.icon = icon;
-            dropdownIconOpen = false;
-            onSaveDeviceDebounced(device);
-          }}
-        >
-          {@render iconComponent(icon)}
-        </DropdownItem>
-      {/each}
+    <Dropdown class="col-start-2 col-end-3 flex" bind:open={dropdownIconOpen}>
+        {#each Object.keys(ICONS) as icon}
+          <DropdownItem
+            class="flex w-[7em] items-center gap-2"
+            on:click={() => {
+              device.icon = icon;
+              dropdownIconOpen = false;
+              onSaveDeviceDebounced(device);
+            }}
+          >
+            {@render iconComponent(icon)}
+          </DropdownItem>
+        {/each}
     </Dropdown>
   </div>
   <Input
     type="text"
     id="name"
-    placeholder={$_('device.name.description')}
+    placeholder={$_('settings.device-edit.name.description')}
     required
     bind:value={device.name}
     oninput={() => {
@@ -139,25 +142,39 @@
   />
 
   <div class="flex items-center justify-start">
-    <input type="file" id="{device.id}-file-upload" class="hidden" onchange={onFileSelected} accept="image/*" />
+    <input
+      type="file"
+      id="{device.id}-file-upload"
+      class="hidden"
+      onchange={onFileSelected}
+      accept="image/*"
+    />
     <Button
       outline
       size="xs"
-      class="border-none w-12"
+      class="w-12 border-none"
       color="light"
-      title={$_('device.picture.upload')}
-      onclick={() => document.getElementById(`${device.id}-file-upload`)?.click()}
+      onclick={() =>
+        document.getElementById(`${device.id}-file-upload`)?.click()}
     >
-    {#if imagePreview}
-      <div class="h-6 w-6 rounded bg-contain bg-center bg-no-repeat" style="background-image: url({imagePreview})"></div>
-    {:else}
-      +<ImageOutline />
-    {/if}
+      {#if imagePreview}
+        <div
+          class="h-6 w-6 rounded bg-contain bg-center bg-no-repeat"
+          style="background-image: url({imagePreview})"
+        ></div>
+      {:else}
+        +<ImageOutline />
+      {/if}
     </Button>
+    <Tooltip>{$_('settings.device-edit.picture.choice')}</Tooltip>
     {#if imagePreview}
-      <button class="border-none px-2 opacity-0 rounded hover:bg-gray-100 group-hover:opacity-100" onclick={onRemovePicture} title={$_('device.picture.remove')}>
+      <button
+        class="rounded border-none px-2 opacity-0 hover:bg-gray-100 group-hover:opacity-100"
+        onclick={onRemovePicture}
+      >
         ×
       </button>
+      <Tooltip>{$_('settings.device-edit.picture.remove')}</Tooltip>
     {/if}
   </div>
 

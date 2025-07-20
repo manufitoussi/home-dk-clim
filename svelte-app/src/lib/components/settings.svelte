@@ -16,7 +16,10 @@
     onAddDevice: () => void;
     onSortDevices: (oldIndex: number, newIndex: number) => void;
     onValidateIp: (ip: string) => Promise<boolean>;
-    onSaveImage: (base64: string, oldFilePath: string | null) => Promise<string | null>;
+    onSaveImage: (
+      base64: string,
+      oldFilePath: string | null,
+    ) => Promise<string | null>;
     onRemoveImage: (filePath: string) => Promise<boolean>;
     onGetImage: (filePath: string) => Promise<string | null>;
   }
@@ -67,6 +70,7 @@
         <div class="font-bold">{$_('settings.device-edit.name.label')}</div>
         <div class="font-bold">{$_('settings.device-edit.ip.label')}</div>
         <div></div>
+        <div></div>
         <div>
           <Button
             outline
@@ -78,9 +82,8 @@
           </Button>
         </div>
         <div></div>
-        <div></div>
         <SortableList
-          class="col-span-7 grid grid-cols-subgrid gap-y-2"
+          class="col-span-9 grid grid-cols-subgrid gap-y-2"
           handle=".handle"
           onSort={(e) => {
             onSortDevices(e.oldIndex, e.newIndex);

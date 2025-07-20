@@ -16,11 +16,22 @@ const onGetTemperatures = async (ip: string) => {
   return await daikinService.getTemperatures(ip);
 };
 
+const onGetControlInfo = async (ip: string) => {
+  return await daikinService.getControlInfo(ip);
+};
+
+const onSetControlInfo = async (ip: string, controls: { [key: string]: string }) => {
+  console.log('Setting control info:', ip, controls);
+  return await daikinService.setControlInfo(ip, controls);
+};
+
 export const load: PageLoad = async ({ parent }) => {
   return {
     onValidateIp,
     onGetImage,
     onGetTemperatures,
+    onGetControlInfo,
+    onSetControlInfo,
     ...(await parent()),
   };
 };

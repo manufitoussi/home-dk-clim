@@ -25,3 +25,15 @@ export function debounce<T extends (...args: any[]) => void>(
     });
   };
 }
+
+
+  export type Dir = '0' | '1' | '2' | '3';
+  export type Rate = 'A' | 'B' | '3' | '4' | '5' | '6';
+  export type Pow = '0' | '1';
+
+  export interface ControlInfo {
+    f_dir: Dir;
+    f_rate: Rate;
+    pow: Pow;
+    stemp: string;
+  }

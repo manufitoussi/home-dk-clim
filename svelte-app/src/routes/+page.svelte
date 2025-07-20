@@ -4,7 +4,14 @@
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
 
-  const { settings, onValidateIp, onGetImage, onGetTemperatures } = data;
+  const {
+    settings,
+    onValidateIp,
+    onGetImage,
+    onGetTemperatures,
+    onGetControlInfo,
+    onSetControlInfo,
+  } = data;
 </script>
 
 <div
@@ -12,6 +19,13 @@
   class="flex flex-1 flex-wrap items-center justify-center gap-4 overflow-hidden overflow-y-auto p-4"
 >
   {#each settings.devices as device (device.id)}
-    <Device {device} {onValidateIp} {onGetImage} {onGetTemperatures} />
+    <Device
+      {device}
+      {onValidateIp}
+      {onGetImage}
+      {onGetTemperatures}
+      {onGetControlInfo}
+      {onSetControlInfo}
+    />
   {/each}
 </div>

@@ -19,6 +19,7 @@ export const load = async () => {
   const settingsService = useSettingsService();
   const daikinService = useDaikinService();
   await settingsService.load();
+  console.log('Settings loaded:', settingsService.settings);
   return {
     settingsService,
     settings: settingsService.settings,

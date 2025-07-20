@@ -14,6 +14,11 @@ export default class DeviceModel implements IModel<MemorizedModel> {
   picture = $state('');
   icon = $state('air-vent');
 
+  controlInfo = $state<{ [key: string]: string }>({});
+
+  isOn = $derived(this.controlInfo?.pow === '1');
+  isOff = $derived(this.controlInfo?.pow === '0');
+
   memorized: MemorizedModel | null = $state(null);
 
   memorize() {

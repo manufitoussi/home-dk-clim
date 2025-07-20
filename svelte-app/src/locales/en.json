@@ -35,13 +35,13 @@
   "main": {
     "all-switch-off": "Switch off",
     "all-switch-on": "Turn on everything",
-    "cold-mode": "Cold fashion",
+    "cool-mode": "Cool mode",
     "default-app-title": "Air conditioning",
     "device": {
       "initializing": "Initialization of the device ...",
       "not-found": "No device found."
     },
-    "hot-mode": "Hot fashion",
+    "heat-mode": "Heat mode",
     "outdoor-temperature": "Outdoor temperature"
   }
 }

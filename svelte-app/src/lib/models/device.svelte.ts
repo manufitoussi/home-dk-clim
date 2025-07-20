@@ -1,5 +1,5 @@
 import type IModel from '$lib/bases/imodel';
-import { type Pow } from '$lib';
+import { ModeEnum, type ModeName, type Pow } from '$lib';
 
 type MemorizedModel = {
   id: string;
@@ -16,6 +16,29 @@ export const powFromIsActive = (isActive: boolean): Pow => {
 export const isActiveFromPow = (pow: Pow): boolean => {
   return pow === '1';
 };
+
+export const modeFromName = (mode: ModeName): ModeEnum => {
+  switch (mode) {
+    case 'cool':
+      return ModeEnum.cool;
+    case 'heat':
+      return ModeEnum.heat;
+    default:
+      throw new Error(`Unknown mode: ${mode}`);
+  }
+};
+
+export const modeNameFromMode = (mode: ModeEnum): ModeName => {
+  switch (mode) {
+    case ModeEnum.cool:
+      return 'cool';
+    case ModeEnum.heat:
+      return 'heat';
+    default:
+      throw new Error(`Unknown mode: ${mode}`);
+  }
+};
+
 export default class DeviceModel implements IModel<MemorizedModel> {
   id = $state('');
   ip = $state('');
@@ -55,6 +78,8 @@ export default class DeviceModel implements IModel<MemorizedModel> {
   isOn = $derived(isActiveFromPow((this.controlInfo?.pow || '0') as Pow));
   isOff = $derived(!isActiveFromPow((this.controlInfo?.pow || '0') as Pow));
 
+  currentMode = $derived(modeNameFromMode(this.controlInfo?.mode as ModeEnum));
+
   switchOn() {
     this.controlInfo.pow = powFromIsActive(true);
   }
@@ -69,5 +94,9 @@ export default class DeviceModel implements IModel<MemorizedModel> {
     } else {
       this.switchOn();
     }
+  }
+
+  switchMode(mode: ModeName) {
+    this.controlInfo.mode = modeFromName(mode);
   }
 }

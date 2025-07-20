@@ -4,8 +4,8 @@
     "outdoor-temperature": "Température extérieure",
     "all-switch-off": "Tout éteindre",
     "all-switch-on": "Tout allumer",
-    "cold-mode": "Mode froid",
-    "hot-mode": "Mode chaud",
+    "cool-mode": "Mode froid",
+    "heat-mode": "Mode chaud",
     "device": {
       "initializing": "Initialisation de l'appareil...",
       "not-found": "Aucun appareil trouvé."

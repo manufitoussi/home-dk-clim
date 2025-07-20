@@ -1,24 +1,26 @@
 <script module lang="ts">
   export const MODES = {
-    'cold': ThermometerSnowflake,
-    'hot': ThermometerSun,
+    cool: ThermometerSnowflake,
+    heat: ThermometerSun,
   };
 </script>
 
 <script lang="ts">
+  import type { ModeName } from '$lib';
+
   import {
-    ThermometerSun,
+    Thermometer,
     ThermometerSnowflake,
-    Thermometer 
+    ThermometerSun,
   } from 'lucide-svelte';
 
   interface ConditionModeProps {
-    mode: 'cold' | 'hot';
+    mode: ModeName;
     size?: string | number | undefined;
-    className?: string; 
+    className?: string;
   }
 
-  const { mode, size, className, ...others} : ConditionModeProps = $props();
+  const { mode, size, className, ...others }: ConditionModeProps = $props();
   let TheIcon = $derived(MODES[mode as keyof typeof MODES] || Thermometer);
 </script>
 

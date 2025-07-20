@@ -9,24 +9,32 @@
   import { ArrowBigLeft, Power, Settings2 } from 'lucide-svelte';
   import { _ } from 'svelte-i18n';
   import { fade, fly } from 'svelte/transition';
+  import type { ModeName } from '$lib';
 
   let { children, data } = $props();
 
   let activeUrl = $derived(page.url.pathname);
   let dropdownIconOpen = $state(false);
-  let currentMode = $state<'cold' | 'hot'>('cold');
-  let outsideConditionMode = $derived<'cold' | 'hot'>(
-    currentMode === 'cold' ? 'hot' : 'cold',
-  );
 
   const { settings, daikinService } = data;
+  let currentMode = $derived(daikinService.currentMode);
+  let outsideConditionMode = $derived<ModeName>(
+    currentMode === 'cool' ? 'heat' : 'cool',
+  );
+
+  const onChangeMode = async (mode: ModeName) => {
+    await daikinService.changeMode(mode);
+    console.log(`Current mode updated to: ${currentMode}`); // Log the updated mode
+  };
 </script>
 
-{#snippet conditionModeIconComponent(mode: 'cold' | 'hot')}
-  <ConditionMode
-    {mode}
-    className="text-{mode === 'cold' ? 'blue' : 'red'}-500 h-5 w-5"
-  />
+{#snippet conditionModeIconComponent(mode: ModeName)}
+  <div in:fade>
+    <ConditionMode
+      {mode}
+      className="text-{mode === 'cool' ? 'blue' : 'red'}-500 h-5 w-5"
+    />
+  </div>
 {/snippet}
 
 <div
@@ -71,6 +79,7 @@
 
   {#if activeUrl !== '/settings'}
     <div
+      transition:fly={{ y: '100%', delay: 500 }}
       class="absolute bottom-2 right-2 flex items-center gap-2 overflow-visible"
     >
       {daikinService.devices.filter((d) => d.isOn).length} / {daikinService
@@ -102,11 +111,15 @@
         color="light"
         class="p-2 shadow-xl"
       >
-        {@render conditionModeIconComponent(currentMode)}
+        {#if currentMode}
+          {@render conditionModeIconComponent(currentMode)}
+        {:else}
+          <div class="h-5 w-5"></div>
+        {/if}
         <ChevronUpOutline class="ms-2 h-5 w-5" />
       </Button>
       <Dropdown bind:open={dropdownIconOpen}>
-        {#each ['cold', 'hot'] as mode}
+        {#each ['cool', 'heat'] as mode}
           <DropdownItem
             class="flex items-center gap-2 {mode === currentMode
               ? 'bg-gray-200 text-gray-900'
@@ -115,11 +128,10 @@
               // Handle mode selection
               dropdownIconOpen = false; // Close the dropdown after selection
               // Additional logic for mode selection can be added here
-              currentMode = mode as 'cold' | 'hot'; // Update the current mode
-              console.log(`Current mode updated to: ${currentMode}`); // Log the updated mode
+              onChangeMode(mode as ModeName);
             }}
           >
-            {@render conditionModeIconComponent(mode as 'cold' | 'hot')}
+            {@render conditionModeIconComponent(mode as ModeName)}
             <span class="whitespace-nowrap text-sm"
               >{$_(`main.${mode}-mode`)}</span
             >

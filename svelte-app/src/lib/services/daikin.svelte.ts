@@ -1,4 +1,4 @@
-import { useSettingsService, type ControlInfo } from '$lib';
+import { useSettingsService, type ControlInfo, type ModeName } from '$lib';
 import Service from '$lib/bases/service';
 import { register } from '$lib/container';
 
@@ -10,6 +10,7 @@ export default class DaikinService extends Service {
   }
 
   outdoorTemperature = $state(0);
+  currentMode = $state<ModeName>();
 
   isSomeOn = $derived(this.getIsSomeOn());
 
@@ -53,6 +54,7 @@ export default class DaikinService extends Service {
         throw new Error(`Device with IP ${ip} not found`);
       }
       device.controlInfo = controlInfo!;
+      this.currentMode = device.currentMode;
       return controlInfo;
     } catch (error) {
       console.error(error);
@@ -143,6 +145,18 @@ export default class DaikinService extends Service {
       this.switchOn(device.ip),
     );
     return Promise.all(promises);
+  }
+
+  async changeMode( mode: ModeName) {
+    this.currentMode = mode;
+    await this.switchOffAll(); // Ensure all devices are off before changing mode
+    const promises = this.devices.map((device) => {
+      device.switchMode(mode);
+      return this.setControlInfo(device.ip, device.controlInfo);
+    });
+    this.currentMode = mode;
+    await Promise.all(promises);
+    this.currentMode = mode;
   }
 }
 

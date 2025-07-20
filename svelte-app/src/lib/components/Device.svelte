@@ -47,7 +47,7 @@
 
     await onGetControlInfo?.(device.ip);
 
-    timeout = setTimeout(autoRefreshData, 5000);
+    timeout = setTimeout(autoRefreshData, 15000);
   };
 
   const switchActive = async () => {

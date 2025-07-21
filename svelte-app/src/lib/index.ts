@@ -26,7 +26,7 @@ export function debounce<T extends (...args: any[]) => void>(
 }
 
 export type Dir = '0' | '1' | '2' | '3';
-export type Rate = 'A' | 'B' | '3' | '4' | '5' | '6';
+export type Rate = 'A' | 'B' | '3' | '4' | '5' | '6' | '7';
 export type Pow = '0' | '1';
 
 export type Mode = '3' | '4';

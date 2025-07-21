@@ -2,16 +2,33 @@
   import type { Dir, Rate } from '$lib';
   import DeviceIcon from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
-  import { Toggle } from 'flowbite-svelte';
-  import { Power, Thermometer } from 'lucide-svelte';
+  import { Button, Toggle } from 'flowbite-svelte';
+  import {
+    AirVent,
+    ArrowRightToLine,
+    Expand,
+    Moon,
+    Power,
+    SignalHigh,
+    SignalLow,
+    SignalMedium,
+    Thermometer,
+    MoveVertical,
+    Ban,
+    MoveHorizontal,
+    Rotate3D,
+  } from 'lucide-svelte';
   import { _ } from 'svelte-i18n';
   import { scale } from 'svelte/transition';
   import DeviceValidStatus from './DeviceValidStatus.svelte';
+
   interface Props {
     device: DeviceModel;
     onValidateIp: (ip: string) => Promise<boolean>;
     onGetImage: (filePath: string) => Promise<string | null>;
-    onToggleSwitch: (device: DeviceModel) => Promise<{ [key: string]: string } | null>;
+    onToggleSwitch: (
+      device: DeviceModel,
+    ) => Promise<{ [key: string]: string } | null>;
     onStartAutoRefresh: (device: DeviceModel) => Promise<void>;
     onStopAutoRefresh: (device: DeviceModel) => Promise<void>;
   }
@@ -32,7 +49,6 @@
   );
 
   let dir = $state<Dir>('0');
-  let rate = $state<Rate>('A');
 
   $effect(() => {
     if (device.picture) {
@@ -58,6 +74,37 @@
     };
   });
 </script>
+
+{#snippet airFlowIconComponent(airFlow: Rate)}
+  {#if airFlow === 'A'}
+    <span>Auto</span>
+  {:else if airFlow === 'B'}
+    <Moon size={16} />
+  {:else if airFlow === '3'}
+    <span>Min</span>
+  {:else if airFlow === '4'}
+    <SignalLow size={16} />
+  {:else if airFlow === '5'}
+    <SignalMedium size={16} />
+  {:else if airFlow === '6'}
+    <SignalHigh size={16} />
+  {:else if airFlow === '7'}
+    <span>Max</span>
+  {/if}
+{/snippet}
+
+{#snippet airDirectionIconComponent(airDirection: Dir)}
+  {#if airDirection === '0'}
+    <Ban size={16} />
+  {:else if airDirection === '3'}
+    <Rotate3D size={16} />
+  {:else if airDirection === '1'}
+    <MoveVertical size={16} />
+  {:else if airDirection === '2'}
+    <MoveHorizontal size={16} />
+  {/if}
+{/snippet}
+ 
 
 <div
   in:scale|global={{ delay: 500, duration: 800 }}
@@ -124,7 +171,38 @@
       <span class="text-red-500">{$_('main.device.not-found')}</span>
     {/if}
   </div>
-  <div class="h-16"></div>
+  <div class="relative m-auto flex h-16 gap-3 p-2 text-gray-700">
+    {#if isValid}
+      <Button
+        class=" bg-white/20 py-1 text-gray-700 hover:bg-white/50"
+        size="xs"
+      >
+        <div class="flex items-center">
+          <ArrowRightToLine class="mr-2" size="16" />
+          {device.sTemperature?.toFixed(1)}
+          <span class="align-top">°C</span>
+        </div>
+      </Button>
+      <Button
+        class=" bg-white/20 py-1 text-gray-700 hover:bg-white/50"
+        size="xs"
+      >
+        <div class="flex items-center">
+          <AirVent class="mr-2" size="16" />
+          {@render airFlowIconComponent(device.flowRate)}
+        </div>
+      </Button>
+      <Button
+        class=" bg-white/20 py-1 text-gray-700 hover:bg-white/50"
+        size="xs"
+      >
+        <div class="flex items-center">
+          <Expand class="mr-2" size="16" />
+          {@render airDirectionIconComponent(device.flowDirection)}
+        </div>
+      </Button>
+    {/if}
+  </div>
   <DeviceValidStatus
     className="absolute top-3 right-1 {isValid ? 'opacity-0' : 'opacity-100'}"
     {device}

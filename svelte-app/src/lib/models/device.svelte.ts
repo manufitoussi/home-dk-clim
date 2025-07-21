@@ -1,5 +1,5 @@
 import type IModel from '$lib/bases/imodel';
-import { ModeEnum, type ModeName, type Pow } from '$lib';
+import { ModeEnum, type Dir, type ModeName, type Pow, type Rate } from '$lib';
 
 type MemorizedModel = {
   id: string;
@@ -81,6 +81,15 @@ export default class DeviceModel implements IModel<MemorizedModel> {
   currentMode = $derived(modeNameFromMode(this.controlInfo?.mode as ModeEnum));
 
   indoorTemperature = $state<number | null>(null);
+
+  sTemperature = $derived.by(() => {
+    const stemp = this.controlInfo?.stemp;
+    return stemp ? parseFloat(stemp) : null;
+  }); 
+
+  flowRate = $derived<Rate>(this.controlInfo?.f_rate as Rate || 'A');
+
+  flowDirection = $derived(this.controlInfo?.f_dir as Dir || '0');
 
   refreshTimeout = $state<ReturnType<typeof setTimeout> | null>(null);
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ControlInfo, Dir, Pow, Rate } from '$lib';
+  import type { Dir, Rate } from '$lib';
   import DeviceIcon from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
   import { Toggle } from 'flowbite-svelte';
@@ -11,50 +11,28 @@
     device: DeviceModel;
     onValidateIp: (ip: string) => Promise<boolean>;
     onGetImage: (filePath: string) => Promise<string | null>;
-    onGetTemperatures: (
-      ip: string,
-    ) => Promise<{ indoorTemperature: number; outdoorTemperature: number }>;
-    onGetControlInfo?: (ip: string) => Promise<ControlInfo>;
-    onSetControlInfo?: (
-      ip: string,
-      controls: { [key: string]: string },
-    ) => Promise<ControlInfo>;
+    onToggleSwitch: (device: DeviceModel) => Promise<{ [key: string]: string } | null>;
+    onStartAutoRefresh: (device: DeviceModel) => Promise<void>;
+    onStopAutoRefresh: (device: DeviceModel) => Promise<void>;
   }
 
   let {
     device,
     onValidateIp,
     onGetImage,
-    onGetTemperatures,
-    onGetControlInfo,
-    onSetControlInfo,
+    onToggleSwitch,
+    onStartAutoRefresh,
+    onStopAutoRefresh,
   }: Props = $props();
   let isValid = $state(false);
   let isInitializing = $state(true);
   let imagePreview = $state('');
-  let indoorTemperature = $state('');
-  let timeout = $state<ReturnType<typeof setTimeout> | null>(null);
+  let indoorTemperature = $derived(
+    device.indoorTemperature ? device.indoorTemperature.toFixed(1) : '',
+  );
 
   let dir = $state<Dir>('0');
   let rate = $state<Rate>('A');
-
-  const autoRefreshData = async () => {
-    const { indoorTemperature: newIndoorTemp } = await onGetTemperatures(
-      device.ip,
-    );
-    console.log('Temperatures:', indoorTemperature);
-    indoorTemperature = newIndoorTemp.toFixed(1);
-
-    await onGetControlInfo?.(device.ip);
-
-    timeout = setTimeout(autoRefreshData, 15000);
-  };
-
-  const switchActive = async () => {
-    device.toggleSwitch();
-    const result = await onSetControlInfo?.(device.ip, device.controlInfo);
-    console.log('Switch result:', result);
-  };
 
   $effect(() => {
     if (device.picture) {
@@ -69,20 +47,14 @@
       isValid = valid;
       isInitializing = false;
       if (valid) {
-        autoRefreshData();
+        onStartAutoRefresh(device);
       } else {
-        if (timeout) {
-          clearTimeout(timeout);
-          timeout = null;
-        }
+        onStopAutoRefresh(device);
       }
     });
 
     return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-      }
+      onStopAutoRefresh(device);
     };
   });
 </script>
@@ -114,7 +86,7 @@
       <Toggle
         class="group ms-auto"
         checked={device.isOn}
-        on:change={switchActive}
+        on:change={() => onToggleSwitch(device)}
         color="green"
       >
         {#if false}

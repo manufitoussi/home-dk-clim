@@ -1,4 +1,5 @@
 import { useSettingsService, useDaikinService } from '$lib';
+import type DeviceModel from '$lib/models/device.svelte';
 import type { PageLoad } from './$types';
 
 const settingsService = useSettingsService();
@@ -12,26 +13,25 @@ const onGetImage = async (filePath: string) => {
   return await settingsService.getImage(filePath);
 };
 
-const onGetTemperatures = async (ip: string) => {
-  return await daikinService.getTemperatures(ip);
+const onStartAutoRefresh = async (device: DeviceModel) => {
+  return await daikinService.startAutoRefresh(device);
 };
 
-const onGetControlInfo = async (ip: string) => {
-  return await daikinService.getControlInfo(ip);
+const onStopAutoRefresh = async (device: DeviceModel) => {
+  return await daikinService.stopAutoRefresh(device);
 };
 
-const onSetControlInfo = async (ip: string, controls: { [key: string]: string }) => {
-  console.log('Setting control info:', ip, controls);
-  return await daikinService.setControlInfo(ip, controls);
+const onToggleSwitch = async (device: DeviceModel) => {
+  return await daikinService.toggleSwitch(device);
 };
 
 export const load: PageLoad = async ({ parent }) => {
   return {
     onValidateIp,
     onGetImage,
-    onGetTemperatures,
-    onGetControlInfo,
-    onSetControlInfo,
+    onToggleSwitch,
+    onStartAutoRefresh,
+    onStopAutoRefresh,
     ...(await parent()),
   };
 };

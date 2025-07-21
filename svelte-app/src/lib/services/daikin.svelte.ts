@@ -1,6 +1,7 @@
-import { useSettingsService, type ControlInfo, type ModeName } from '$lib';
+import { useSettingsService, type ControlInfo, type ModeName, type SetResult } from '$lib';
 import Service from '$lib/bases/service';
 import { register } from '$lib/container';
+import type DeviceModel from '$lib/models/device.svelte';
 
 export default class DaikinService extends Service {
   settingsService = useSettingsService();
@@ -67,7 +68,7 @@ export default class DaikinService extends Service {
     }
   }
 
-  async setControlInfo(ip: string, controls: { [key: string]: string }) {
+  async setControlInfo(ip: string, controls: { [key: string]: string }): Promise<SetResult> {
     try {
       const controlParams = new URLSearchParams(controls).toString();
       console.log(
@@ -101,7 +102,7 @@ export default class DaikinService extends Service {
     }
   }
 
-  async setActivityControl(ip: string, isActive: boolean) {
+  async setActivityControl(ip: string, isActive: boolean): Promise<SetResult> {
     console.log(
       `Setting activity control for ${ip} to ${isActive ? 'ON' : 'OFF'}`,
     );
@@ -125,38 +126,150 @@ export default class DaikinService extends Service {
     }
   }
 
-  async switchOff(ip: string) {
+  async _switchOff(ip: string) : Promise<SetResult> {
     return this.setActivityControl(ip, false);
   }
 
-  async switchOn(ip: string) {
+  async switchOff(device: DeviceModel) {
+    try {
+      this.stopAutoRefresh(device);
+      const result = await this._switchOff(device.ip);
+      return result;
+    } catch (error) {
+      console.error('Error switching off device:', error);
+      throw error;
+    } finally {
+      this.startAutoRefresh(device);
+    }
+  }
+
+  async _switchOn(ip: string) {
     return this.setActivityControl(ip, true);
   }
 
-  async switchOffAll() {
+  async switchOn(device: DeviceModel) {
+    try {
+      this.stopAutoRefresh(device);
+      const result = await this._switchOn(device.ip);
+      return result;
+    } catch (error) {
+      console.error('Error switching on device:', error);
+      throw error;
+    } finally {
+      this.startAutoRefresh(device);
+    }
+  }
+
+  async toggleSwitch(device: DeviceModel) {
+    if (device.isOn) {
+      return this.switchOff(device);
+    } else {
+      return this.switchOn(device);
+    }
+  }
+  
+  async _switchOffAll() {
     const promises = Array.from(this.devices).map((device) =>
-      this.switchOff(device.ip),
+      this._switchOff(device.ip),
+    );
+    return Promise.all(promises);
+  }
+
+  async switchOffAll() {
+    try {
+      this.stopAutoRefreshAll();
+      const result = await this._switchOffAll();
+      return result;
+    } catch (error) {
+      console.error('Error switching off all devices:', error);
+      throw error;
+    } finally {
+      this.startAutoRefreshAll();
+    }
+  }
+
+  async _switchOnAll() {
+    const promises = Array.from(this.devices).map((device) =>
+      this._switchOn(device.ip),
     );
     return Promise.all(promises);
   }
 
   async switchOnAll() {
-    const promises = Array.from(this.devices).map((device) =>
-      this.switchOn(device.ip),
+    try {
+      this.stopAutoRefreshAll();
+      const result = await this._switchOnAll();
+      return result;
+    } catch (error) {
+      console.error('Error switching on all devices:', error);
+      throw error;
+    } finally {
+      this.startAutoRefreshAll();
+    }
+  }
+
+  async changeMode(mode: ModeName) {
+    try {
+      this.stopAutoRefreshAll();
+      this.currentMode = mode;
+      await this._switchOffAll(); // Ensure all devices are off before changing mode
+      const promises = this.devices.map((device) => {
+        device.switchMode(mode);
+        return this.setControlInfo(device.ip, device.controlInfo);
+      });
+      this.currentMode = mode;
+      await Promise.all(promises);
+      this.currentMode = mode;
+    } catch (error) {
+      console.error('Error changing mode:', error);
+      throw error;
+    } finally {
+      await this.startAutoRefreshAll();
+    }
+  }
+
+  async autoRefreshData(device: DeviceModel) {
+    console.log('autoRefreshData for device:', device.ip);
+    const { indoorTemperature: newIndoorTemp } = await this.getTemperatures(
+      device.ip,
     );
+    device.indoorTemperature = newIndoorTemp;
+
+    await this.getControlInfo(device.ip);
+
+    device.refreshTimeout = setTimeout(
+      () => this.autoRefreshData(device),
+      5000,
+    );
+  }
+
+  async startAutoRefresh(device: DeviceModel) {
+    console.log('Starting auto-refresh for device:', device.ip);
+    if (device.refreshTimeout) {
+      clearTimeout(device.refreshTimeout);
+      device.refreshTimeout = null;
+    }
+
+    await this.autoRefreshData(device);
+  }
+
+  stopAutoRefresh(device: DeviceModel) {
+    console.log('Stopping auto-refresh for device:', device.ip);
+    if (device.refreshTimeout) {
+      clearTimeout(device.refreshTimeout);
+      device.refreshTimeout = null;
+    }
+  }
+
+  async startAutoRefreshAll() {
+    console.log('Starting auto-refresh for all devices');
+    const promises = this.devices.map((device) => this.startAutoRefresh(device));
     return Promise.all(promises);
   }
 
-  async changeMode( mode: ModeName) {
-    this.currentMode = mode;
-    await this.switchOffAll(); // Ensure all devices are off before changing mode
-    const promises = this.devices.map((device) => {
-      device.switchMode(mode);
-      return this.setControlInfo(device.ip, device.controlInfo);
-    });
-    this.currentMode = mode;
-    await Promise.all(promises);
-    this.currentMode = mode;
+  stopAutoRefreshAll() {
+    console.log('Stopping auto-refresh for all devices');
+    this.devices.forEach((device) => this.stopAutoRefresh(device));
   }
 }
 

@@ -39,6 +39,8 @@ export interface ControlInfo {
   mode: Mode;
 }
 
+export type SetResult = { [key: string]: string } | null;
+
 export enum ModeEnum {
   cool = '3',
   heat = '4',

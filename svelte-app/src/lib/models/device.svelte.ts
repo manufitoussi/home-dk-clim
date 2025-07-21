@@ -80,6 +80,10 @@ export default class DeviceModel implements IModel<MemorizedModel> {
 
   currentMode = $derived(modeNameFromMode(this.controlInfo?.mode as ModeEnum));
 
+  indoorTemperature = $state<number | null>(null);
+
+  refreshTimeout = $state<ReturnType<typeof setTimeout> | null>(null);
+
   switchOn() {
     this.controlInfo.pow = powFromIsActive(true);
   }

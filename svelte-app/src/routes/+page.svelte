@@ -8,9 +8,9 @@
     settings,
     onValidateIp,
     onGetImage,
-    onGetTemperatures,
-    onGetControlInfo,
-    onSetControlInfo,
+    onToggleSwitch,
+    onStartAutoRefresh,
+    onStopAutoRefresh,
   } = data;
 </script>
 
@@ -23,9 +23,9 @@
       {device}
       {onValidateIp}
       {onGetImage}
-      {onGetTemperatures}
-      {onGetControlInfo}
-      {onSetControlInfo}
+      {onToggleSwitch}
+      {onStartAutoRefresh}
+      {onStopAutoRefresh}
     />
   {/each}
 </div>

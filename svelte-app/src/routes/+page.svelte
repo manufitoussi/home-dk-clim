@@ -8,7 +8,8 @@
     settings,
     onValidateIp,
     onGetImage,
-    onToggleSwitch,
+    onTogglePower,
+    onSwitchFlowRate,
     onStartAutoRefresh,
     onStopAutoRefresh,
   } = data;
@@ -23,7 +24,8 @@
       {device}
       {onValidateIp}
       {onGetImage}
-      {onToggleSwitch}
+      {onTogglePower}
+      {onSwitchFlowRate}
       {onStartAutoRefresh}
       {onStopAutoRefresh}
     />

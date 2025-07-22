@@ -2,32 +2,38 @@
   import type { Dir, Rate } from '$lib';
   import DeviceIcon from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
-  import { Button, Toggle } from 'flowbite-svelte';
+  import { Button, ButtonGroup, Toggle } from 'flowbite-svelte';
   import {
     AirVent,
     ArrowRightToLine,
+    Ban,
     Expand,
+    Icon as LucideIcon,
     Moon,
+    MoveHorizontal,
+    MoveVertical,
     Power,
+    Rotate3D,
     SignalHigh,
     SignalLow,
     SignalMedium,
     Thermometer,
-    MoveVertical,
-    Ban,
-    MoveHorizontal,
-    Rotate3D,
   } from 'lucide-svelte';
   import { _ } from 'svelte-i18n';
   import { scale } from 'svelte/transition';
+  import ButtonModal from './ButtonModal.svelte';
   import DeviceValidStatus from './DeviceValidStatus.svelte';
 
   interface Props {
     device: DeviceModel;
     onValidateIp: (ip: string) => Promise<boolean>;
     onGetImage: (filePath: string) => Promise<string | null>;
-    onToggleSwitch: (
+    onTogglePower: (
       device: DeviceModel,
+    ) => Promise<{ [key: string]: string } | null>;
+    onSwitchFlowRate: (
+      device: DeviceModel,
+      flowRate: Rate,
     ) => Promise<{ [key: string]: string } | null>;
     onStartAutoRefresh: (device: DeviceModel) => Promise<void>;
     onStopAutoRefresh: (device: DeviceModel) => Promise<void>;
@@ -37,7 +43,8 @@
     device,
     onValidateIp,
     onGetImage,
-    onToggleSwitch,
+    onTogglePower,
+    onSwitchFlowRate,
     onStartAutoRefresh,
     onStopAutoRefresh,
   }: Props = $props();
@@ -49,6 +56,8 @@
   );
 
   let dir = $state<Dir>('0');
+
+  let flowRateCommand = $state<Rate>(device.flowRate || 'A');
 
   $effect(() => {
     if (device.picture) {
@@ -75,7 +84,7 @@
   });
 </script>
 
-{#snippet airFlowIconComponent(airFlow: Rate)}
+{#snippet flowRateIconComponent(airFlow: Rate)}
   {#if airFlow === 'A'}
     <span>Auto</span>
   {:else if airFlow === 'B'}
@@ -104,7 +113,28 @@
     <MoveHorizontal size={16} />
   {/if}
 {/snippet}
- 
+
+{#snippet headerTitleContent(
+  name: string,
+  Icon: typeof LucideIcon,
+  field: string,
+)}
+  <div class="flex items-center gap-1">
+    {name}
+    <!-- svelte-ignore svelte_component_deprecated -->
+    <svelte:component this={Icon} size={16} />
+    {field}
+  </div>
+{/snippet}
+
+{#snippet flowRateChoiceButton(rate: Rate)}
+  <Button
+    on:click={() => (flowRateCommand = rate)}
+    color={flowRateCommand === rate ? 'dark' : 'light'}
+  >
+    {@render flowRateIconComponent(rate)}</Button
+  >
+{/snippet}
 
 <div
   in:scale|global={{ delay: 500, duration: 800 }}
@@ -133,7 +163,7 @@
       <Toggle
         class="group ms-auto"
         checked={device.isOn}
-        on:change={() => onToggleSwitch(device)}
+        on:change={() => onTogglePower(device)}
         color="green"
       >
         {#if false}
@@ -173,34 +203,39 @@
   </div>
   <div class="relative m-auto flex h-16 gap-3 p-2 text-gray-700">
     {#if isValid}
-      <Button
-        class=" bg-white/20 py-1 text-gray-700 hover:bg-white/50"
-        size="xs"
-      >
+      <ButtonModal>
         <div class="flex items-center">
           <ArrowRightToLine class="mr-2" size="16" />
           {device.sTemperature?.toFixed(1)}
           <span class="align-top">°C</span>
         </div>
-      </Button>
-      <Button
-        class=" bg-white/20 py-1 text-gray-700 hover:bg-white/50"
-        size="xs"
-      >
+      </ButtonModal>
+      <ButtonModal onSubmit={() => onSwitchFlowRate(device, flowRateCommand)}>
         <div class="flex items-center">
           <AirVent class="mr-2" size="16" />
-          {@render airFlowIconComponent(device.flowRate)}
+          {@render flowRateIconComponent(device.flowRate)}
         </div>
-      </Button>
-      <Button
-        class=" bg-white/20 py-1 text-gray-700 hover:bg-white/50"
-        size="xs"
-      >
+        {#snippet headerContent()}
+          {@render headerTitleContent(device.name, AirVent, 'FLOW RATE')}
+        {/snippet}
+        {#snippet modalContent()}
+          <ButtonGroup>
+            {@render flowRateChoiceButton('A')}
+            {@render flowRateChoiceButton('B')}
+            {@render flowRateChoiceButton('3')}
+            {@render flowRateChoiceButton('4')}
+            {@render flowRateChoiceButton('5')}
+            {@render flowRateChoiceButton('6')}
+            {@render flowRateChoiceButton('7')}
+          </ButtonGroup>
+        {/snippet}
+      </ButtonModal>
+      <ButtonModal>
         <div class="flex items-center">
           <Expand class="mr-2" size="16" />
           {@render airDirectionIconComponent(device.flowDirection)}
         </div>
-      </Button>
+      </ButtonModal>
     {/if}
   </div>
   <DeviceValidStatus

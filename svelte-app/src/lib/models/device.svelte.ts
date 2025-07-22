@@ -85,11 +85,11 @@ export default class DeviceModel implements IModel<MemorizedModel> {
   sTemperature = $derived.by(() => {
     const stemp = this.controlInfo?.stemp;
     return stemp ? parseFloat(stemp) : null;
-  }); 
+  });
 
-  flowRate = $derived<Rate>(this.controlInfo?.f_rate as Rate || 'A');
+  flowRate = $derived<Rate>((this.controlInfo?.f_rate as Rate) || 'A');
 
-  flowDirection = $derived(this.controlInfo?.f_dir as Dir || '0');
+  flowDirection = $derived((this.controlInfo?.f_dir as Dir) || '0');
 
   refreshTimeout = $state<ReturnType<typeof setTimeout> | null>(null);
 
@@ -101,7 +101,7 @@ export default class DeviceModel implements IModel<MemorizedModel> {
     this.controlInfo.pow = powFromIsActive(false);
   }
 
-  toggleSwitch() {
+  togglePower() {
     if (this.isOn) {
       this.switchOff();
     } else {
@@ -111,5 +111,9 @@ export default class DeviceModel implements IModel<MemorizedModel> {
 
   switchMode(mode: ModeName) {
     this.controlInfo.mode = modeFromName(mode);
+  }
+
+  switchFlowRate(rate: Rate) {
+    this.controlInfo.f_rate = rate;
   }
 }

@@ -1,10 +1,10 @@
-import { useSettingsService, type ControlInfo, type ModeName, type SetResult } from '$lib';
+import { useSettingsService, type ControlInfo, type ModeName, type Rate, type SetResult } from '$lib';
 import Service from '$lib/bases/service';
 import { register } from '$lib/container';
 import type DeviceModel from '$lib/models/device.svelte';
 
 export default class DaikinService extends Service {
-  settingsService = useSettingsService();
+  private settingsService = useSettingsService();
 
   get devices() {
     return this.settingsService.settings.devices;
@@ -102,38 +102,29 @@ export default class DaikinService extends Service {
     }
   }
 
-  async setActivityControl(ip: string, isActive: boolean): Promise<SetResult> {
+  private async _setActivityControl(device: DeviceModel, isActive: boolean): Promise<SetResult> {
     console.log(
-      `Setting activity control for ${ip} to ${isActive ? 'ON' : 'OFF'}`,
+      `Setting activity control for ${device.ip} to ${isActive ? 'ON' : 'OFF'}`,
     );
-    const device = this.devices.find((device) => device.ip === ip);
-    if (!device) {
-      throw new Error(`Device with IP ${ip} not found`);
-    }
 
-    const controlInfo = device.controlInfo;
-    if (!controlInfo) {
-      throw new Error(`Control info for IP ${ip} not found on device.`);
-    }
+    device.togglePower();
 
-    const newPow: ControlInfo['pow'] = isActive ? '1' : '0';
-    controlInfo.pow = newPow;
     try {
-      return await this.setControlInfo(ip, controlInfo);
+      return await this.setControlInfo(device.ip, device.controlInfo);
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
 
-  async _switchOff(ip: string) : Promise<SetResult> {
-    return this.setActivityControl(ip, false);
+  private async _switchOff(device: DeviceModel) : Promise<SetResult> {
+    return this._setActivityControl(device, false);
   }
 
   async switchOff(device: DeviceModel) {
     try {
       this.stopAutoRefresh(device);
-      const result = await this._switchOff(device.ip);
+      const result = await this._switchOff(device);
       return result;
     } catch (error) {
       console.error('Error switching off device:', error);
@@ -143,14 +134,14 @@ export default class DaikinService extends Service {
     }
   }
 
-  async _switchOn(ip: string) {
-    return this.setActivityControl(ip, true);
+  private async _switchOn(device: DeviceModel) {
+    return this._setActivityControl(device, true);
   }
 
   async switchOn(device: DeviceModel) {
     try {
       this.stopAutoRefresh(device);
-      const result = await this._switchOn(device.ip);
+      const result = await this._switchOn(device);
       return result;
     } catch (error) {
       console.error('Error switching on device:', error);
@@ -160,7 +151,7 @@ export default class DaikinService extends Service {
     }
   }
 
-  async toggleSwitch(device: DeviceModel) {
+  async togglePower(device: DeviceModel) {
     if (device.isOn) {
       return this.switchOff(device);
     } else {
@@ -168,9 +159,9 @@ export default class DaikinService extends Service {
     }
   }
   
-  async _switchOffAll() {
+  private async _switchOffAll() {
     const promises = Array.from(this.devices).map((device) =>
-      this._switchOff(device.ip),
+      this._switchOff(device),
     );
     return Promise.all(promises);
   }
@@ -188,9 +179,9 @@ export default class DaikinService extends Service {
     }
   }
 
-  async _switchOnAll() {
+  private async _switchOnAll() {
     const promises = Array.from(this.devices).map((device) =>
-      this._switchOn(device.ip),
+      this._switchOn(device),
     );
     return Promise.all(promises);
   }
@@ -225,6 +216,19 @@ export default class DaikinService extends Service {
       throw error;
     } finally {
       await this.startAutoRefreshAll();
+    }
+  }
+
+  async switchFlowRate(device: DeviceModel, rate: Rate) {
+    try {
+      this.stopAutoRefresh(device);
+      device.switchFlowRate(rate);
+      return await this.setControlInfo(device.ip, device.controlInfo);
+    } catch (error) {
+      console.error('Error switching flow rate:', error);
+      throw error;
+    } finally {
+      this.startAutoRefresh(device);
     }
   }
 

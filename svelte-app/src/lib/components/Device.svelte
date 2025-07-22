@@ -10,6 +10,8 @@
     Expand,
     Icon as LucideIcon,
     Moon,
+    ArrowDownUp,
+    ArrowLeftRight,
     MoveHorizontal,
     MoveVertical,
     Power,
@@ -35,6 +37,10 @@
       device: DeviceModel,
       flowRate: Rate,
     ) => Promise<{ [key: string]: string } | null>;
+    onSwitchFlowDirection: (
+      device: DeviceModel,
+      flowDirection: Dir,
+    ) => Promise<{ [key: string]: string } | null>;
     onStartAutoRefresh: (device: DeviceModel) => Promise<void>;
     onStopAutoRefresh: (device: DeviceModel) => Promise<void>;
   }
@@ -45,6 +51,7 @@
     onGetImage,
     onTogglePower,
     onSwitchFlowRate,
+    onSwitchFlowDirection,
     onStartAutoRefresh,
     onStopAutoRefresh,
   }: Props = $props();
@@ -55,8 +62,7 @@
     device.indoorTemperature ? device.indoorTemperature.toFixed(1) : '',
   );
 
-  let dir = $state<Dir>('0');
-
+  let flowDirectionCommand = $state<Dir>('0');
   let flowRateCommand = $state<Rate>(device.flowRate || 'A');
 
   $effect(() => {
@@ -102,15 +108,15 @@
   {/if}
 {/snippet}
 
-{#snippet airDirectionIconComponent(airDirection: Dir)}
+{#snippet flowDirectionIconComponent(airDirection: Dir)}
   {#if airDirection === '0'}
     <Ban size={16} />
   {:else if airDirection === '3'}
     <Rotate3D size={16} />
   {:else if airDirection === '1'}
-    <MoveVertical size={16} />
+    <ArrowDownUp size={16} />
   {:else if airDirection === '2'}
-    <MoveHorizontal size={16} />
+    <ArrowLeftRight size={16} />
   {/if}
 {/snippet}
 
@@ -133,6 +139,15 @@
     color={flowRateCommand === rate ? 'dark' : 'light'}
   >
     {@render flowRateIconComponent(rate)}</Button
+  >
+{/snippet}
+
+{#snippet flowDirectionChoiceButton(direction: Dir)}
+  <Button
+    on:click={() => (flowDirectionCommand = direction)}
+    color={flowDirectionCommand === direction ? 'dark' : 'light'}
+  >
+    {@render flowDirectionIconComponent(direction)}</Button
   >
 {/snippet}
 
@@ -234,11 +249,26 @@
           </ButtonGroup>
         {/snippet}
       </ButtonModal>
-      <ButtonModal>
+      <ButtonModal
+        onSubmit={() => onSwitchFlowDirection(device, flowDirectionCommand)}
+        onCancel={() => (flowDirectionCommand = device.flowDirection || '0')}
+        isSubmitAccented={flowDirectionCommand !== device.flowDirection}
+      >
         <div class="flex items-center">
           <Expand class="mr-2" size="16" />
-          {@render airDirectionIconComponent(device.flowDirection)}
+          {@render flowDirectionIconComponent(device.flowDirection)}
         </div>
+        {#snippet headerContent()}
+          {@render headerTitleContent(device.name, Expand, 'FLOW DIRECTION')}
+        {/snippet}
+        {#snippet modalContent()}
+          <ButtonGroup>
+            {@render flowDirectionChoiceButton('0')}
+            {@render flowDirectionChoiceButton('1')}
+            {@render flowDirectionChoiceButton('2')}
+            {@render flowDirectionChoiceButton('3')}
+          </ButtonGroup>
+        {/snippet}
       </ButtonModal>
     {/if}
   </div>

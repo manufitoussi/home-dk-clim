@@ -1,4 +1,10 @@
-import { useSettingsService, type ControlInfo, type ModeName, type Rate, type SetResult } from '$lib';
+import {
+  useSettingsService,
+  type Dir,
+  type ModeName,
+  type Rate,
+  type SetResult,
+} from '$lib';
 import Service from '$lib/bases/service';
 import { register } from '$lib/container';
 import type DeviceModel from '$lib/models/device.svelte';
@@ -68,7 +74,10 @@ export default class DaikinService extends Service {
     }
   }
 
-  async setControlInfo(ip: string, controls: { [key: string]: string }): Promise<SetResult> {
+  async setControlInfo(
+    ip: string,
+    controls: { [key: string]: string },
+  ): Promise<SetResult> {
     try {
       const controlParams = new URLSearchParams(controls).toString();
       console.log(
@@ -102,7 +111,10 @@ export default class DaikinService extends Service {
     }
   }
 
-  private async _setActivityControl(device: DeviceModel, isActive: boolean): Promise<SetResult> {
+  private async _setActivityControl(
+    device: DeviceModel,
+    isActive: boolean,
+  ): Promise<SetResult> {
     console.log(
       `Setting activity control for ${device.ip} to ${isActive ? 'ON' : 'OFF'}`,
     );
@@ -117,7 +129,7 @@ export default class DaikinService extends Service {
     }
   }
 
-  private async _switchOff(device: DeviceModel) : Promise<SetResult> {
+  private async _switchOff(device: DeviceModel): Promise<SetResult> {
     return this._setActivityControl(device, false);
   }
 
@@ -158,7 +170,7 @@ export default class DaikinService extends Service {
       return this.switchOn(device);
     }
   }
-  
+
   private async _switchOffAll() {
     const promises = Array.from(this.devices).map((device) =>
       this._switchOff(device),
@@ -232,6 +244,19 @@ export default class DaikinService extends Service {
     }
   }
 
+  async switchFlowDirection(device: DeviceModel, flowDirection: Dir) {
+    try {
+      this.stopAutoRefresh(device);
+      device.switchFlowDirection(flowDirection);
+      return await this.setControlInfo(device.ip, device.controlInfo);
+    } catch (error) {
+      console.error('Error switching flow direction:', error);
+      throw error;
+    } finally {
+      this.startAutoRefresh(device);
+    }
+  }
+
   async autoRefreshData(device: DeviceModel) {
     console.log('autoRefreshData for device:', device.ip);
     const { indoorTemperature: newIndoorTemp } = await this.getTemperatures(
@@ -267,7 +292,9 @@ export default class DaikinService extends Service {
 
   async startAutoRefreshAll() {
     console.log('Starting auto-refresh for all devices');
-    const promises = this.devices.map((device) => this.startAutoRefresh(device));
+    const promises = this.devices.map((device) =>
+      this.startAutoRefresh(device),
+    );
     return Promise.all(promises);
   }
 

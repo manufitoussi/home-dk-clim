@@ -1,4 +1,4 @@
-import { useSettingsService, useDaikinService, type Rate } from '$lib';
+import { useSettingsService, useDaikinService, type Rate, type Dir } from '$lib';
 import type DeviceModel from '$lib/models/device.svelte';
 import type { PageLoad } from './$types';
 
@@ -29,12 +29,17 @@ const onSwitchFlowRate = async (device: DeviceModel, flowRate: Rate) => {
   return await daikinService.switchFlowRate(device, flowRate);
 };
 
+const onSwitchFlowDirection = async (device: DeviceModel, flowDirection: Dir) => {
+  return await daikinService.switchFlowDirection(device, flowDirection);
+};
+
 export const load: PageLoad = async ({ parent }) => {
   return {
     onValidateIp,
     onGetImage,
     onTogglePower,
     onSwitchFlowRate,
+    onSwitchFlowDirection,
     onStartAutoRefresh,
     onStopAutoRefresh,
     ...(await parent()),

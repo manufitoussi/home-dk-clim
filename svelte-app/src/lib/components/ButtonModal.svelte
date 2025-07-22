@@ -61,7 +61,7 @@
   <div slot="header" class="flex items-center gap-2 text-sm font-bold">
     {@render headerContent?.({})}
   </div>
-  <div>
+  <div class="flex justify-center">
     {@render modalContent?.({})}
   </div>
   <div

@@ -86,9 +86,7 @@ export default class DeviceModel implements IModel<MemorizedModel> {
     const stemp = this.controlInfo?.stemp;
     return stemp ? parseFloat(stemp) : null;
   });
-
   flowRate = $derived<Rate>((this.controlInfo?.f_rate as Rate) || 'A');
-
   flowDirection = $derived((this.controlInfo?.f_dir as Dir) || '0');
 
   refreshTimeout = $state<ReturnType<typeof setTimeout> | null>(null);
@@ -115,5 +113,9 @@ export default class DeviceModel implements IModel<MemorizedModel> {
 
   switchFlowRate(rate: Rate) {
     this.controlInfo.f_rate = rate;
+  }
+
+  switchFlowDirection(dir: Dir) {
+    this.controlInfo.f_dir = dir;
   }
 }

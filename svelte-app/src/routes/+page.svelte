@@ -10,6 +10,7 @@
     onGetImage,
     onTogglePower,
     onSwitchFlowRate,
+    onSwitchFlowDirection,
     onStartAutoRefresh,
     onStopAutoRefresh,
   } = data;
@@ -26,6 +27,7 @@
       {onGetImage}
       {onTogglePower}
       {onSwitchFlowRate}
+      {onSwitchFlowDirection}
       {onStartAutoRefresh}
       {onStopAutoRefresh}
     />

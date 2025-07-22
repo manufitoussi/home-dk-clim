@@ -11,6 +11,7 @@
     onTogglePower,
     onSwitchFlowRate,
     onSwitchFlowDirection,
+    onSetTemperature,
     onStartAutoRefresh,
     onStopAutoRefresh,
   } = data;
@@ -28,6 +29,7 @@
       {onTogglePower}
       {onSwitchFlowRate}
       {onSwitchFlowDirection}
+      {onSetTemperature}
       {onStartAutoRefresh}
       {onStopAutoRefresh}
     />

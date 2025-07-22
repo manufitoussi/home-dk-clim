@@ -119,7 +119,11 @@ export default class DaikinService extends Service {
       `Setting activity control for ${device.ip} to ${isActive ? 'ON' : 'OFF'}`,
     );
 
-    device.togglePower();
+    if (isActive) {
+      device.switchOn();
+    } else {
+      device.switchOff();
+    }
 
     try {
       return await this.setControlInfo(device.ip, device.controlInfo);
@@ -251,6 +255,19 @@ export default class DaikinService extends Service {
       return await this.setControlInfo(device.ip, device.controlInfo);
     } catch (error) {
       console.error('Error switching flow direction:', error);
+      throw error;
+    } finally {
+      this.startAutoRefresh(device);
+    }
+  }
+
+  async setTemperature(device: DeviceModel, temperature: string) {
+    try {
+      this.stopAutoRefresh(device);
+      device.setTemperature(temperature);
+      return await this.setControlInfo(device.ip, device.controlInfo);
+    } catch (error) {
+      console.error('Error setting temperature:', error);
       throw error;
     } finally {
       this.startAutoRefresh(device);

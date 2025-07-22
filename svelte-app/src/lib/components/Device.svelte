@@ -1,19 +1,17 @@
 <script lang="ts">
-  import type { Dir, Rate } from '$lib';
+  import { ModeEnum, type Dir, type Rate } from '$lib';
   import DeviceIcon from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
-  import { Button, ButtonGroup, Toggle } from 'flowbite-svelte';
+  import { Button, ButtonGroup, Range, Toggle } from 'flowbite-svelte';
   import {
     AirVent,
+    ArrowDownUp,
+    ArrowLeftRight,
     ArrowRightToLine,
     Ban,
     Expand,
     Icon as LucideIcon,
     Moon,
-    ArrowDownUp,
-    ArrowLeftRight,
-    MoveHorizontal,
-    MoveVertical,
     Power,
     Rotate3D,
     SignalHigh,
@@ -41,6 +39,10 @@
       device: DeviceModel,
       flowDirection: Dir,
     ) => Promise<{ [key: string]: string } | null>;
+    onSetTemperature: (
+      device: DeviceModel,
+      temperature: string,
+    ) => Promise<{ [key: string]: string } | null>;
     onStartAutoRefresh: (device: DeviceModel) => Promise<void>;
     onStopAutoRefresh: (device: DeviceModel) => Promise<void>;
   }
@@ -52,6 +54,7 @@
     onTogglePower,
     onSwitchFlowRate,
     onSwitchFlowDirection,
+    onSetTemperature,
     onStartAutoRefresh,
     onStopAutoRefresh,
   }: Props = $props();
@@ -64,6 +67,13 @@
 
   let flowDirectionCommand = $state<Dir>('0');
   let flowRateCommand = $state<Rate>(device.flowRate || 'A');
+  let sTemperatureCommand = $state(device.sTemperature || 20);
+
+  let minTemperature = $derived(
+    device.currentMode === 'cool' ? 18 : 15,
+  );
+
+  const maxTemperature = 30;
 
   $effect(() => {
     if (device.picture) {
@@ -218,12 +228,61 @@
   </div>
   <div class="relative m-auto flex h-16 gap-3 p-2 text-gray-700">
     {#if isValid}
-      <ButtonModal>
+      <ButtonModal
+        onWillOpen={() => {
+          sTemperatureCommand = device.sTemperature!;
+        }}
+        onCancel={() => (sTemperatureCommand = device.sTemperature!)}
+        onSubmit={() => onSetTemperature(device, sTemperatureCommand.toFixed(1))}
+        isSubmitAccented={sTemperatureCommand !== device.sTemperature}
+      >
         <div class="flex items-center">
           <ArrowRightToLine class="mr-2" size="16" />
           {device.sTemperature?.toFixed(1)}
           <span class="align-top">°C</span>
         </div>
+        {#snippet headerContent()}
+          {@render headerTitleContent(
+            device.name,
+            ArrowRightToLine,
+            `${sTemperatureCommand.toFixed(1)}°C`,
+          )}
+        {/snippet}
+        {#snippet modalContent()}
+          <div class="relative w-[400px]">
+            {#if device.currentMode === 'heat'}
+            <span
+              class="absolute -bottom-6 start-0 text-sm text-gray-500 dark:text-gray-400"
+              >15°C</span
+            >
+            {/if}
+            <span style="inset-inline-start: {Math.round(400.0 / (maxTemperature - minTemperature) * (20 - minTemperature)) - (device.currentMode === 'cool' ? 10 : 13)}px;"
+              class="pointer-events-none absolute -bottom-6 text-sm text-gray-500 dark:text-gray-400"
+              >20°C <div
+                class="absolute -top-5 start-1/2 h-3 w-1 -translate-x-1/2 border-r border-blue-500"
+              ></div>
+            </span>
+            <span
+              style="inset-inline-start: {Math.round(400.0 / (maxTemperature - minTemperature) * (25 - minTemperature)) - (device.currentMode === 'cool' ? 17 : 20)}px;"
+              class="pointer-events-none absolute -bottom-6 text-sm text-gray-500 rtl:translate-x-1/2 dark:text-gray-400"
+              >25°C <div
+                class="absolute -top-5 start-1/2 h-3 w-1 -translate-x-1/2 border-r border-blue-500"
+              ></div>
+            </span>
+            <span
+              class="pointer-events-none absolute -bottom-6 end-0 text-sm text-gray-500 dark:text-gray-400"
+              >30°C</span
+            >
+            <Range
+              min={minTemperature}
+              max={maxTemperature}
+              step={0.5}
+              color={device.currentMode === 'cool' ? 'blue' : 'red'}
+              bind:value={sTemperatureCommand}
+              class="w-fill"
+            />
+          </div>
+        {/snippet}
       </ButtonModal>
       <ButtonModal
         onSubmit={() => onSwitchFlowRate(device, flowRateCommand)}

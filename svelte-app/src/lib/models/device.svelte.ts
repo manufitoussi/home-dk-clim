@@ -118,4 +118,8 @@ export default class DeviceModel implements IModel<MemorizedModel> {
   switchFlowDirection(dir: Dir) {
     this.controlInfo.f_dir = dir;
   }
+
+  setTemperature(temperature: string) {
+    this.controlInfo.stemp = temperature;
+  }
 }

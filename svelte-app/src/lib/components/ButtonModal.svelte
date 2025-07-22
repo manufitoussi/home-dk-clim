@@ -10,6 +10,7 @@
     children?: Snippet<[any]> | undefined;
     headerContent?: Snippet<[any]> | undefined;
     modalContent?: Snippet<[any]> | undefined;
+    isSubmitAccented?: boolean;
   }
 
   let {
@@ -20,6 +21,7 @@
     children,
     headerContent,
     modalContent,
+    isSubmitAccented = false,
   }: Props = $props();
   let isOpened = $state(false);
 
@@ -66,7 +68,7 @@
     slot="footer"
     class="m-0 flex w-full flex-row-reverse content-end items-end gap-2 p-0"
   >
-    <Button size="xs" color="dark" onclick={handleSubmit}>VALIDATE</Button>
+    <Button color={isSubmitAccented ? 'dark' : 'alternative'} size="xs" onclick={handleSubmit}>SUBMIT</Button>
     <Button color="alternative" size="xs" onclick={handleCancel}>CANCEL</Button>
   </div>
 </Modal>

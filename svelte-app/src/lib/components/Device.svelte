@@ -210,7 +210,11 @@
           <span class="align-top">°C</span>
         </div>
       </ButtonModal>
-      <ButtonModal onSubmit={() => onSwitchFlowRate(device, flowRateCommand)}>
+      <ButtonModal
+        onSubmit={() => onSwitchFlowRate(device, flowRateCommand)}
+        onCancel={() => (flowRateCommand = device.flowRate || 'A')}
+        isSubmitAccented={flowRateCommand !== device.flowRate}
+      >
         <div class="flex items-center">
           <AirVent class="mr-2" size="16" />
           {@render flowRateIconComponent(device.flowRate)}

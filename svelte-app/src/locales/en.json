@@ -39,9 +39,19 @@
     "default-app-title": "Air conditioning",
     "device": {
       "initializing": "Initialization of the device ...",
-      "not-found": "No device found."
+      "not-found": "No device found.",
+      "set-temperature": "Set temperature",
+      "switch-flow-rate": "Switch air flow rate",
+      "switch-flow-direction": "Switch air flow direction",
+      "switch-off": "Switch off",
+      "switch-on": "Switch on"
     },
     "heat-mode": "Heat mode",
     "outdoor-temperature": "Outdoor temperature"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "submit": "Apply",
+    "submit-all": "Apply all"
   }
 }

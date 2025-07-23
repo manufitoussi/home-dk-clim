@@ -2,14 +2,14 @@
   import '../app.css';
 
   import { page } from '$app/state';
+  import type { ModeName } from '$lib';
   import ConditionMode from '$lib/components/ConditionMode.svelte';
   import NavButton from '$lib/components/NavButton.svelte';
   import { Button, Dropdown, DropdownItem, Tooltip } from 'flowbite-svelte';
   import { ChevronUpOutline } from 'flowbite-svelte-icons';
   import { ArrowBigLeft, Power, Settings2 } from 'lucide-svelte';
   import { _ } from 'svelte-i18n';
-  import { fade, fly } from 'svelte/transition';
-  import type { ModeName } from '$lib';
+  import { fade, fly, slide } from 'svelte/transition';
 
   let { children, data } = $props();
 
@@ -67,10 +67,10 @@
             ><span class="align-top text-sm">°C</span>
           </div>
         </div>
-        <Tooltip class="z-50">{$_('main.outdoor-temperature')}</Tooltip>
+        <Tooltip transition={fade} params={{ duration: 100 }} class="z-50">{$_('main.outdoor-temperature')}</Tooltip>
 
         <NavButton href="/settings"><Settings2 /></NavButton>
-        <Tooltip class="z-50">{$_('settings.page-title')}</Tooltip>
+        <Tooltip transition={fade} params={{ duration: 100 }} class="z-50">{$_('settings.page-title')}</Tooltip>
       </div>
     {/if}
   </div>
@@ -99,7 +99,7 @@
       >
         <Power class="h-5 w-5 font-bold" strokeWidth="2" />
       </Button>
-      <Tooltip color={daikinService.isSomeOn ? 'gray' : 'green'} class="z-50"
+      <Tooltip transition={fade} params={{ duration: 100 }} color={daikinService.isSomeOn ? 'gray' : 'green'} class="z-50"
         >{$_(
           daikinService.isSomeOn ? 'main.all-switch-off' : 'main.all-switch-on',
         )}</Tooltip
@@ -140,7 +140,7 @@
         {/each}
       </Dropdown>
       {#if !dropdownIconOpen}
-        <Tooltip triggeredBy="#mode-toggle" class="z-50 whitespace-nowrap"
+        <Tooltip transition={fade} params={{ duration: 100 }} triggeredBy="#mode-toggle" class="z-50 whitespace-nowrap"
           >{$_(`main.${currentMode}-mode`)}</Tooltip
         >
       {/if}

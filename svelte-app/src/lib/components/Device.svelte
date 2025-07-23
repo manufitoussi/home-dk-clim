@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { ModeEnum, type Dir, type Rate } from '$lib';
+  import { type Dir, type Rate } from '$lib';
   import DeviceIcon from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
-  import { Button, ButtonGroup, Range, Toggle } from 'flowbite-svelte';
+  import { Button, ButtonGroup, Range, Toggle, Tooltip } from 'flowbite-svelte';
   import {
     AirVent,
     ArrowDownUp,
@@ -20,7 +20,7 @@
     Thermometer,
   } from 'lucide-svelte';
   import { _ } from 'svelte-i18n';
-  import { scale } from 'svelte/transition';
+  import { fade, scale } from 'svelte/transition';
   import ButtonModal from './ButtonModal.svelte';
   import DeviceValidStatus from './DeviceValidStatus.svelte';
 
@@ -218,6 +218,14 @@
           </div>
         {/if}
       </Toggle>
+      <Tooltip
+        transition={fade}
+        params={{ duration: 100, delay: 300 }}
+        class="z-50"
+        >{$_(
+          device.isOn ? 'main.device.switch-off' : 'main.device.switch-on',
+        )}</Tooltip
+      >
     {/if}
   </div>
   <div class="relative flex h-full items-center p-4 text-gray-700">
@@ -253,6 +261,9 @@
           {device.sTemperature?.toFixed(1)}
           <span class="align-top">°C</span>
         </div>
+        {#snippet buttonTooltipContent()}
+          {$_('main.device.set-temperature')}
+        {/snippet}
         {#snippet headerContent()}
           {@render headerTitleContent(
             device.name,
@@ -316,6 +327,9 @@
           <AirVent class="mr-2" size="16" />
           {@render flowRateIconComponent(device.flowRate)}
         </div>
+        {#snippet buttonTooltipContent()}
+          {$_('main.device.switch-flow-rate')}
+        {/snippet}
         {#snippet headerContent()}
           {@render headerTitleContent(device.name, AirVent, 'FLOW RATE')}
         {/snippet}
@@ -344,6 +358,9 @@
           <Expand class="mr-2" size="16" />
           {@render flowDirectionIconComponent(device.flowDirection)}
         </div>
+        {#snippet buttonTooltipContent()}
+          {$_('main.device.switch-flow-direction')}
+        {/snippet}
         {#snippet headerContent()}
           {@render headerTitleContent(device.name, Expand, 'FLOW DIRECTION')}
         {/snippet}

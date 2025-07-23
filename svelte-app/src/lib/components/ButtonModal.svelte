@@ -5,9 +5,12 @@
     Dropdown,
     DropdownItem,
     Modal,
+    Tooltip,
   } from 'flowbite-svelte';
   import { Check, CheckCheck, ChevronDown } from 'lucide-svelte';
   import type { Snippet } from 'svelte';
+  import { _ } from 'svelte-i18n';
+  import { fade, slide } from 'svelte/transition';
 
   interface Props {
     onSubmit?: () => void;
@@ -18,6 +21,7 @@
     children?: Snippet<[any]> | undefined;
     headerContent?: Snippet<[any]> | undefined;
     modalContent?: Snippet<[any]> | undefined;
+    buttonTooltipContent?: Snippet<[any]> | undefined;
     isSubmitAccented?: boolean;
   }
 
@@ -30,6 +34,7 @@
     children,
     headerContent,
     modalContent,
+    buttonTooltipContent,
     isSubmitAccented = false,
   }: Props = $props();
   let isOpened = $state(false);
@@ -53,9 +58,12 @@
     onSubmitAll?.();
     isOpened = false;
   }
+
+  const uniqId = `tt_${Math.random().toString(36).substring(2, 15)}`;
 </script>
 
 <Button
+  id={uniqId}
   class=" bg-white/20 py-1 text-gray-700 hover:bg-white/50"
   size="xs"
   onclick={handleOpen}
@@ -63,6 +71,7 @@
   {@render children?.({})}
 </Button>
 <Modal
+  transition={slide}
   outsideclose
   bind:open={isOpened}
   onclose={() => {
@@ -88,7 +97,7 @@
         color={isSubmitAccented ? 'primary' : 'alternative'}
         disabled={!isSubmitAccented}
         size="xs"
-        onclick={handleSubmit}><Check size={16} /> SUBMIT</Button
+        onclick={handleSubmit}><Check size={16} /> {$_('common.submit')}</Button
       >
       <Button class="ml-[1px] !rounded-e-lg" color="alternative" size="xs"
         ><ChevronDown size={16} /></Button
@@ -98,12 +107,23 @@
         classContainer="bg-transparent"
       >
         <DropdownItem
-          class="flex items-center gap-2 whitespace-nowrap rounded-lg border-gray-600 bg-white text-gray-600 hover:bg-gray-100"
+          class="flex items-center gap-2 whitespace-nowrap rounded-lg border-gray-600 bg-white text-xs font-normal text-gray-600 hover:bg-gray-100"
           onclick={handleSubmitAll}
-          ><CheckCheck size={16} /> SUBMIT ALL</DropdownItem
+          ><CheckCheck size={16} /> {$_('common.submit-all')}</DropdownItem
         >
       </Dropdown>
     </ButtonGroup>
-    <Button color="light" size="xs" onclick={handleCancel}>CANCEL</Button>
+    <!-- <Button color="light" size="xs" onclick={handleCancel}>{$_('common.cancel')}</Button> -->
   </div>
 </Modal>
+
+{#if buttonTooltipContent}
+  <Tooltip
+    transition={fade}
+    params={{ duration: 100, delay: 200 }}
+    class="z-200 whitespace-nowrap"
+    triggeredBy={`#${uniqId}`}
+  >
+    {@render buttonTooltipContent?.({})}
+  </Tooltip>
+{/if}

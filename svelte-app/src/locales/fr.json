@@ -8,7 +8,12 @@
     "heat-mode": "Mode chaud",
     "device": {
       "initializing": "Initialisation de l'appareil...",
-      "not-found": "Aucun appareil trouvé."
+      "not-found": "Aucun appareil trouvé.",
+      "set-temperature": "Définir la température",
+      "switch-flow-rate": "Changer le débit d'air",
+      "switch-flow-direction": "Changer la direction du flux",
+      "switch-off": "Éteindre",
+      "switch-on": "Allumer"
     }
   },
   "settings": {
@@ -43,5 +48,10 @@
         "remove": "Supprimer l'image"
       }
     }
+  },
+  "common": {
+    "cancel": "Annuler",
+    "submit": "Appliquer",
+    "submit-all": "Appliquer partout"
   }
 }

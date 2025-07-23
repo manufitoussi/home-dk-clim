@@ -37,6 +37,18 @@ const onSetTemperature = async (device: DeviceModel, temperature: string) => {
   return await daikinService.setTemperature(device, temperature);
 };
 
+const onSwitchFlowRateAll = async (flowRate: Rate) => {
+  return await daikinService.switchFlowRateAll(flowRate);
+};
+
+const onSwitchFlowDirectionAll = async (flowDirection: Dir) => {
+  return await daikinService.switchFlowDirectionAll(flowDirection);
+};
+
+const onSetTemperatureAll = async (temperature: string) => {
+  return await daikinService.setTemperatureAll(temperature);
+};
+
 export const load: PageLoad = async ({ parent }) => {
   return {
     onValidateIp,
@@ -44,6 +56,9 @@ export const load: PageLoad = async ({ parent }) => {
     onTogglePower,
     onSwitchFlowRate,
     onSwitchFlowDirection,
+    onSwitchFlowRateAll,
+    onSwitchFlowDirectionAll,
+    onSetTemperatureAll,
     onSetTemperature,
     onStartAutoRefresh,
     onStopAutoRefresh,

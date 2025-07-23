@@ -79,7 +79,8 @@
 
   {#if activeUrl !== '/settings'}
     <div
-      in:fly|global={{ y: '100%', delay: 1000 }} out:fly|global={{ y: '100%' }}
+      in:fly|global={{ y: '100%', delay: 1000 }}
+      out:fly|global={{ y: '100%' }}
       class="absolute bottom-2 right-2 flex items-center gap-2 overflow-visible"
     >
       {daikinService.devices.filter((d) => d.isOn).length} / {daikinService
@@ -88,7 +89,7 @@
         pill
         outline
         class="p-2 text-white shadow-xl {daikinService.isSomeOn
-          ? 'border-green-400 bg-green-500  hover:border-gray-400 hover:bg-gray-500'
+          ? 'border-green-400 bg-green-500  hover:border-red-400 hover:bg-red-500'
           : 'border-gray-400 bg-gray-500 hover:border-green-400 hover:bg-green-500'}"
         size="xs"
         onclick={() =>

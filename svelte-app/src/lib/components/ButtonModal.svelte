@@ -1,9 +1,17 @@
 <script lang="ts">
-  import { Button, Modal } from 'flowbite-svelte';
+  import {
+    Button,
+    ButtonGroup,
+    Dropdown,
+    DropdownItem,
+    Modal,
+  } from 'flowbite-svelte';
+  import { Check, CheckCheck, ChevronDown } from 'lucide-svelte';
   import type { Snippet } from 'svelte';
 
   interface Props {
     onSubmit?: () => void;
+    onSubmitAll?: () => void;
     onCancel?: () => void;
     onWillOpen?: () => void;
     onDidClose?: () => void;
@@ -15,6 +23,7 @@
 
   let {
     onSubmit,
+    onSubmitAll,
     onCancel,
     onWillOpen,
     onDidClose,
@@ -39,6 +48,11 @@
     onSubmit?.();
     isOpened = false;
   }
+
+  function handleSubmitAll() {
+    onSubmitAll?.();
+    isOpened = false;
+  }
 </script>
 
 <Button
@@ -49,6 +63,7 @@
   {@render children?.({})}
 </Button>
 <Modal
+  outsideclose
   bind:open={isOpened}
   onclose={() => {
     onDidClose?.();
@@ -68,7 +83,27 @@
     slot="footer"
     class="m-0 flex w-full flex-row-reverse content-end items-end gap-2 p-0"
   >
-    <Button color={isSubmitAccented ? 'dark' : 'alternative'} size="xs" onclick={handleSubmit}>SUBMIT</Button>
-    <Button color="alternative" size="xs" onclick={handleCancel}>CANCEL</Button>
+    <ButtonGroup>
+      <Button
+        color={isSubmitAccented ? 'primary' : 'alternative'}
+        disabled={!isSubmitAccented}
+        size="xs"
+        onclick={handleSubmit}><Check size={16} /> SUBMIT</Button
+      >
+      <Button class="ml-[1px] !rounded-e-lg" color="alternative" size="xs"
+        ><ChevronDown size={16} /></Button
+      >
+      <Dropdown
+        class="border-none bg-transparent p-0 shadow-md"
+        classContainer="bg-transparent"
+      >
+        <DropdownItem
+          class="flex items-center gap-2 whitespace-nowrap rounded-lg border-gray-600 bg-white text-gray-600 hover:bg-gray-100"
+          onclick={handleSubmitAll}
+          ><CheckCheck size={16} /> SUBMIT ALL</DropdownItem
+        >
+      </Dropdown>
+    </ButtonGroup>
+    <Button color="light" size="xs" onclick={handleCancel}>CANCEL</Button>
   </div>
 </Modal>

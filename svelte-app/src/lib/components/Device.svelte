@@ -43,6 +43,15 @@
       device: DeviceModel,
       temperature: string,
     ) => Promise<{ [key: string]: string } | null>;
+    onSwitchFlowRateAll: (
+      flowRate: Rate,
+    ) => Promise<Array<{ [key: string]: string } | null>>;
+    onSwitchFlowDirectionAll: (
+      flowDirection: Dir,
+    ) => Promise<Array<{ [key: string]: string } | null>>;
+    onSetTemperatureAll: (
+      temperature: string,
+    ) => Promise<Array<{ [key: string]: string } | null>>;
     onStartAutoRefresh: (device: DeviceModel) => Promise<void>;
     onStopAutoRefresh: (device: DeviceModel) => Promise<void>;
   }
@@ -55,6 +64,9 @@
     onSwitchFlowRate,
     onSwitchFlowDirection,
     onSetTemperature,
+    onSwitchFlowRateAll,
+    onSwitchFlowDirectionAll,
+    onSetTemperatureAll,
     onStartAutoRefresh,
     onStopAutoRefresh,
   }: Props = $props();
@@ -69,9 +81,7 @@
   let flowRateCommand = $state<Rate>(device.flowRate || 'A');
   let sTemperatureCommand = $state(device.sTemperature || 20);
 
-  let minTemperature = $derived(
-    device.currentMode === 'cool' ? 18 : 15,
-  );
+  let minTemperature = $derived(device.currentMode === 'cool' ? 18 : 15);
 
   const maxTemperature = 30;
 
@@ -233,7 +243,9 @@
           sTemperatureCommand = device.sTemperature!;
         }}
         onCancel={() => (sTemperatureCommand = device.sTemperature!)}
-        onSubmit={() => onSetTemperature(device, sTemperatureCommand.toFixed(1))}
+        onSubmit={() =>
+          onSetTemperature(device, sTemperatureCommand.toFixed(1))}
+        onSubmitAll={() => onSetTemperatureAll(sTemperatureCommand.toFixed(1))}
         isSubmitAccented={sTemperatureCommand !== device.sTemperature}
       >
         <div class="flex items-center">
@@ -251,19 +263,26 @@
         {#snippet modalContent()}
           <div class="relative w-[400px]">
             {#if device.currentMode === 'heat'}
-            <span
-              class="absolute -bottom-6 start-0 text-sm text-gray-500 dark:text-gray-400"
-              >15°C</span
-            >
+              <span
+                class="absolute -bottom-6 start-0 text-sm text-gray-500 dark:text-gray-400"
+                >15°C</span
+              >
             {/if}
-            <span style="inset-inline-start: {Math.round(400.0 / (maxTemperature - minTemperature) * (20 - minTemperature)) - (device.currentMode === 'cool' ? 10 : 13)}px;"
+            <span
+              style="inset-inline-start: {Math.round(
+                (400.0 / (maxTemperature - minTemperature)) *
+                  (20 - minTemperature),
+              ) - (device.currentMode === 'cool' ? 10 : 13)}px;"
               class="pointer-events-none absolute -bottom-6 text-sm text-gray-500 dark:text-gray-400"
               >20°C <div
                 class="absolute -top-5 start-1/2 h-3 w-1 -translate-x-1/2 border-r border-blue-500"
               ></div>
             </span>
             <span
-              style="inset-inline-start: {Math.round(400.0 / (maxTemperature - minTemperature) * (25 - minTemperature)) - (device.currentMode === 'cool' ? 17 : 20)}px;"
+              style="inset-inline-start: {Math.round(
+                (400.0 / (maxTemperature - minTemperature)) *
+                  (25 - minTemperature),
+              ) - (device.currentMode === 'cool' ? 17 : 20)}px;"
               class="pointer-events-none absolute -bottom-6 text-sm text-gray-500 rtl:translate-x-1/2 dark:text-gray-400"
               >25°C <div
                 class="absolute -top-5 start-1/2 h-3 w-1 -translate-x-1/2 border-r border-blue-500"
@@ -285,7 +304,11 @@
         {/snippet}
       </ButtonModal>
       <ButtonModal
+        onWillOpen={() => {
+          flowRateCommand = device.flowRate || 'A';
+        }}
         onSubmit={() => onSwitchFlowRate(device, flowRateCommand)}
+        onSubmitAll={() => onSwitchFlowRateAll(flowRateCommand)}
         onCancel={() => (flowRateCommand = device.flowRate || 'A')}
         isSubmitAccented={flowRateCommand !== device.flowRate}
       >
@@ -309,7 +332,11 @@
         {/snippet}
       </ButtonModal>
       <ButtonModal
+        onWillOpen={() => {
+          flowDirectionCommand = device.flowDirection || '0';
+        }}
         onSubmit={() => onSwitchFlowDirection(device, flowDirectionCommand)}
+        onSubmitAll={() => onSwitchFlowDirectionAll(flowDirectionCommand)}
         onCancel={() => (flowDirectionCommand = device.flowDirection || '0')}
         isSubmitAccented={flowDirectionCommand !== device.flowDirection}
       >

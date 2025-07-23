@@ -11,6 +11,9 @@
     onTogglePower,
     onSwitchFlowRate,
     onSwitchFlowDirection,
+    onSwitchFlowRateAll,
+    onSwitchFlowDirectionAll,
+    onSetTemperatureAll,
     onSetTemperature,
     onStartAutoRefresh,
     onStopAutoRefresh,
@@ -30,6 +33,9 @@
       {onSwitchFlowRate}
       {onSwitchFlowDirection}
       {onSetTemperature}
+      {onSwitchFlowRateAll}
+      {onSwitchFlowDirectionAll}
+      {onSetTemperatureAll}
       {onStartAutoRefresh}
       {onStopAutoRefresh}
     />

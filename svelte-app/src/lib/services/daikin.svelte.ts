@@ -248,6 +248,13 @@ export default class DaikinService extends Service {
     }
   }
 
+  async switchFlowRateAll(rate: Rate) {
+    const promises = this.devices.map((device) =>
+      this.switchFlowRate(device, rate),
+    );
+    return await Promise.all(promises);
+  }
+
   async switchFlowDirection(device: DeviceModel, flowDirection: Dir) {
     try {
       this.stopAutoRefresh(device);
@@ -261,6 +268,13 @@ export default class DaikinService extends Service {
     }
   }
 
+  async switchFlowDirectionAll(flowDirection: Dir) {
+    const promises = this.devices.map((device) =>
+      this.switchFlowDirection(device, flowDirection),
+    );
+    return await Promise.all(promises);
+  }
+
   async setTemperature(device: DeviceModel, temperature: string) {
     try {
       this.stopAutoRefresh(device);
@@ -272,6 +286,13 @@ export default class DaikinService extends Service {
     } finally {
       this.startAutoRefresh(device);
     }
+  }
+
+  async setTemperatureAll(temperature: string) {
+    const promises = this.devices.map((device) =>
+      this.setTemperature(device, temperature),
+    );
+    return await Promise.all(promises);
   }
 
   async autoRefreshData(device: DeviceModel) {

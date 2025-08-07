@@ -166,7 +166,7 @@
         +<ImageOutline />
       {/if}
     </Button>
-    <Tooltip>{$_('settings.device-edit.picture.choice')}</Tooltip>
+    <Tooltip class="whitespace-nowrap bg-gray-200 text-black">{$_('settings.device-edit.picture.choice')}</Tooltip>
     {#if imagePreview}
       <button
         class="rounded border-none px-2 opacity-0 hover:bg-gray-100 group-hover:opacity-100"
@@ -174,7 +174,7 @@
       >
         ×
       </button>
-      <Tooltip>{$_('settings.device-edit.picture.remove')}</Tooltip>
+      <Tooltip class="whitespace-nowrap bg-gray-200 text-black">{$_('settings.device-edit.picture.remove')}</Tooltip>
     {/if}
   </div>
 

@@ -2,7 +2,7 @@
   import { type Dir, type Rate } from '$lib';
   import DeviceIcon from '$lib/components/DeviceIcon.svelte';
   import type DeviceModel from '$lib/models/device.svelte';
-  import { Button, ButtonGroup, Range, Toggle, Tooltip } from 'flowbite-svelte';
+  import { Button, ButtonGroup, P, Range, Toggle, Tooltip } from 'flowbite-svelte';
   import {
     AirVent,
     ArrowDownUp,
@@ -197,6 +197,7 @@
     {#if isValid}
       <Toggle
         class="group ms-auto"
+        classDiv="bg-gray-400 shadow-md hover:shadow-lg {device.isOn ? 'shadow-green-600' : 'shadow-gray-500'}"
         checked={device.isOn}
         on:change={() => onTogglePower(device)}
         color="green"
@@ -220,8 +221,8 @@
       </Toggle>
       <Tooltip
         transition={fade}
-        params={{ duration: 100, delay: 300 }}
-        class="z-50"
+        params={{ duration: 100, delay: 100}}
+        class="z-50 whitespace-nowrap bg-gray-200 text-black"
         >{$_(
           device.isOn ? 'main.device.switch-off' : 'main.device.switch-on',
         )}</Tooltip

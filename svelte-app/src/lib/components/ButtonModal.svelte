@@ -64,7 +64,7 @@
 
 <Button
   id={uniqId}
-  class=" bg-white/20 py-1 text-gray-700 hover:bg-white/50"
+  class=" bg-white/20 shadow-md hover:shadow-lg shadow-gray-500 py-1 text-gray-700 hover:bg-white/50"
   size="xs"
   onclick={handleOpen}
 >
@@ -120,8 +120,8 @@
 {#if buttonTooltipContent}
   <Tooltip
     transition={fade}
-    params={{ duration: 100, delay: 200 }}
-    class="z-200 whitespace-nowrap"
+    params={{ duration: 100, delay: 100 }}
+    class="z-200 whitespace-nowrap bg-gray-200 text-black"
     triggeredBy={`#${uniqId}`}
   >
     {@render buttonTooltipContent?.({})}

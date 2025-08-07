@@ -67,10 +67,20 @@
             ><span class="align-top text-sm">°C</span>
           </div>
         </div>
-        <Tooltip transition={fade} params={{ duration: 100 }} class="z-50">{$_('main.outdoor-temperature')}</Tooltip>
+        <Tooltip
+          transition={fade}
+          params={{ duration: 100 }}
+          class="z-50 whitespace-nowrap bg-gray-200 text-black"
+          >{$_('main.outdoor-temperature')}</Tooltip
+        >
 
         <NavButton href="/settings"><Settings2 /></NavButton>
-        <Tooltip transition={fade} params={{ duration: 100 }} class="z-50">{$_('settings.page-title')}</Tooltip>
+        <Tooltip
+          transition={fade}
+          params={{ duration: 100 }}
+          class="z-50 whitespace-nowrap bg-gray-200 text-black"
+          >{$_('settings.page-title')}</Tooltip
+        >
       </div>
     {/if}
   </div>
@@ -88,8 +98,8 @@
       <Button
         pill
         outline
-        class="p-2 text-white shadow-xl {daikinService.isSomeOn
-          ? 'border-green-400 bg-green-500  hover:border-red-400 hover:bg-red-500'
+        class="p-2 text-white shadow-md hover:shadow-lg {daikinService.isSomeOn
+          ? 'border-green-400 bg-green-500 shadow-green-400  hover:border-red-400 hover:bg-red-500'
           : 'border-gray-400 bg-gray-500 hover:border-green-400 hover:bg-green-500'}"
         size="xs"
         onclick={() =>
@@ -99,7 +109,11 @@
       >
         <Power class="h-5 w-5 font-bold" strokeWidth="2" />
       </Button>
-      <Tooltip transition={fade} params={{ duration: 100 }} color={daikinService.isSomeOn ? 'gray' : 'green'} class="z-50"
+      <Tooltip
+        transition={fade}
+        params={{ duration: 100 }}
+        color={daikinService.isSomeOn ? 'gray' : 'green'}
+        class="z-50 whitespace-nowrap bg-gray-200 text-black"
         >{$_(
           daikinService.isSomeOn ? 'main.all-switch-off' : 'main.all-switch-on',
         )}</Tooltip
@@ -140,7 +154,11 @@
         {/each}
       </Dropdown>
       {#if !dropdownIconOpen}
-        <Tooltip transition={fade} params={{ duration: 100 }} triggeredBy="#mode-toggle" class="z-50 whitespace-nowrap"
+        <Tooltip
+          transition={fade}
+          params={{ duration: 100 }}
+          triggeredBy="#mode-toggle"
+          class="z-50 whitespace-nowrap bg-gray-200 text-black"
           >{$_(`main.${currentMode}-mode`)}</Tooltip
         >
       {/if}

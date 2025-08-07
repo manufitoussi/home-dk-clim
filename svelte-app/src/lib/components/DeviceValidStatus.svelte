@@ -34,7 +34,7 @@
     <Tooltip
       transition={fade}
       params={{ duration: 100 }}
-      class="whitespace-nowrap">{$_('settings.device-looking-for')}</Tooltip
+      class="whitespace-nowrap bg-gray-200 text-black">{$_('settings.device-looking-for')}</Tooltip
     >
   {:then}
     {#if isValid}
@@ -42,18 +42,18 @@
       <Tooltip
         transition={fade}
         params={{ duration: 100 }}
-        class="whitespace-nowrap">{$_('settings.device-found')}</Tooltip
+        class="whitespace-nowrap bg-gray-200 text-black">{$_('settings.device-found')}</Tooltip
       >
     {:else}
       <XIcon color="orange" />
       <Tooltip
         transition={fade}
         params={{ duration: 100 }}
-        class="whitespace-nowrap">{$_('settings.device-not-found')}</Tooltip
+        class="whitespace-nowrap bg-gray-200 text-black">{$_('settings.device-not-found')}</Tooltip
       >
     {/if}
   {:catch error}
     <TriangleAlert color="red" />
-    <Tooltip>{error.message || error}</Tooltip>
+    <Tooltip class="whitespace-nowrap bg-gray-200 text-black">{error.message || error}</Tooltip>
   {/await}
 </div>
